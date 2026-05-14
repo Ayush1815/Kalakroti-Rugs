@@ -1,0 +1,23 @@
+# Django
+*.log
+*.sqlite3
+aura_backend/.env
+.env
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project specific
+.uv-cache/
+staticfiles/
+node_modules/

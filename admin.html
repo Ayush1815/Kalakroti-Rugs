@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalakroti Admin | Luxury Curation Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        heritage: {
+                            cream: '#f7f4ee',
+                            dark: '#1a1a1a',
+                            gold: '#c5a059',
+                            rust: '#8e5b3e',
+                            beige: '#e8e2d6',
+                            border: '#dcd3c1'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        garamond: ['Cormorant Garamond', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .section-tab.active {
+            @apply border-heritage-gold text-heritage-dark;
+        }
+        .form-input {
+            @apply w-full bg-transparent border-b border-heritage-border py-4 focus:border-heritage-gold outline-none transition-all font-sans text-sm placeholder:text-heritage-dark/20;
+        }
+        .form-label {
+            @apply block text-[10px] uppercase tracking-[3px] font-bold text-heritage-dark/40 mb-2;
+        }
+        body { background-color: #f7f4ee; }
+    </style>
+</head>
+<body class="font-sans text-heritage-dark">
+
+    <!-- Sticky Header -->
+    <header class="sticky top-0 z-[100] bg-heritage-cream/80 backdrop-blur-xl border-b border-heritage-border/30 px-12 py-6 flex justify-between items-center">
+        <div class="flex items-center gap-8">
+            <h1 class="font-serif text-2xl tracking-widest uppercase">Kalakroti Admin</h1>
+            <nav class="flex gap-8 text-[10px] uppercase tracking-[2px] font-semibold text-heritage-dark/40">
+                <a href="#" class="text-heritage-dark border-b border-heritage-gold pb-1">Products</a>
+                <a href="#" class="hover:text-heritage-dark transition-colors">Collections</a>
+                <a href="#" class="hover:text-heritage-dark transition-colors">Orders</a>
+                <a href="#" class="hover:text-heritage-dark transition-colors">Analytics</a>
+            </nav>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="saveProduct('draft')" class="px-8 py-3 border border-heritage-border text-[10px] uppercase tracking-[2px] font-bold hover:bg-white transition-all">Save Draft</button>
+            <button onclick="saveProduct()" class="px-8 py-3 bg-heritage-dark text-white text-[10px] uppercase tracking-[2px] font-bold hover:bg-heritage-gold transition-all shadow-xl">Publish Product</button>
+        </div>
+    </header>
+
+    <main class="max-w-[1600px] mx-auto px-12 py-16 grid grid-cols-12 gap-16">
+        
+        <!-- Product List Sidebar -->
+        <div class="col-span-3 space-y-8 sticky top-32 h-fit">
+            <div class="bg-white/40 border border-heritage-border/30 rounded-2xl p-6">
+                <h3 class="font-serif text-lg italic mb-6">Existing Collection</h3>
+                <div id="product-list" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                    <!-- Products will be injected here -->
+                    <div class="animate-pulse flex gap-4">
+                        <div class="w-12 h-12 bg-heritage-beige rounded"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-2 bg-heritage-beige rounded w-3/4"></div>
+                            <div class="h-2 bg-heritage-beige rounded w-1/2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white/40 border border-heritage-border/30 rounded-2xl p-6 space-y-4">
+                <div>
+                    <h3 class="font-serif text-lg italic">Bulk Import</h3>
+                    <p class="text-[10px] uppercase tracking-[2px] text-heritage-dark/40 mt-1">CSV inventory upload</p>
+                </div>
+                <input id="bulk-file" type="file" accept=".csv,text/csv" class="w-full text-xs">
+                <button type="button" onclick="importCsv()" class="w-full py-3 bg-heritage-rust text-white text-[10px] uppercase tracking-[2px] font-bold hover:bg-heritage-dark transition-all">Import CSV</button>
+                <button type="button" onclick="downloadCsvTemplate()" class="w-full py-3 border border-heritage-border text-[10px] uppercase tracking-[2px] font-bold hover:bg-white transition-all">Template</button>
+                <p id="bulk-status" class="text-xs leading-relaxed text-heritage-dark/50"></p>
+            </div>
+
+            <div class="space-y-2">
+                <button onclick="switchSection('core')" class="section-tab active w-full text-left px-6 py-4 border-l-2 border-transparent text-[11px] uppercase tracking-[3px] font-bold transition-all hover:bg-heritage-beige">Core Information</button>
+                <button onclick="switchSection('pricing')" class="section-tab w-full text-left px-6 py-4 border-l-2 border-transparent text-[11px] uppercase tracking-[3px] font-bold text-heritage-dark/30 transition-all hover:bg-heritage-beige">Pricing & Inventory</button>
+                <button onclick="switchSection('media')" class="section-tab w-full text-left px-6 py-4 border-l-2 border-transparent text-[11px] uppercase tracking-[3px] font-bold text-heritage-dark/30 transition-all hover:bg-heritage-beige">Product Media</button>
+                <button onclick="switchSection('specs')" class="section-tab w-full text-left px-6 py-4 border-l-2 border-transparent text-[11px] uppercase tracking-[3px] font-bold text-heritage-dark/30 transition-all hover:bg-heritage-beige">Rug Specifications</button>
+                <button onclick="switchSection('story')" class="section-tab w-full text-left px-6 py-4 border-l-2 border-transparent text-[11px] uppercase tracking-[3px] font-bold text-heritage-dark/30 transition-all hover:bg-heritage-beige">Artisan Story</button>
+            </div>
+        </div>
+
+        <!-- Form Content -->
+        <form id="product-form" class="col-span-9 space-y-24 pb-32">
+            <input type="hidden" id="product-id">
+            
+            <!-- Section 1: Core -->
+            <section id="section-core" class="space-y-12">
+                <div class="border-b border-heritage-border pb-4">
+                    <h2 class="font-serif text-3xl italic">Core Information</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-12">
+                    <div class="col-span-2">
+                        <label class="form-label">Product Title</label>
+                        <input type="text" id="title" name="title" class="form-input text-2xl font-serif" placeholder="e.g. Imperial Tabriz Silk Rug">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="form-label">Short Description</label>
+                        <input type="text" id="short_description" name="short_description" class="form-input" placeholder="Brief summary for product cards...">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="form-label">Storytelling Description</label>
+                        <textarea id="description" name="description" class="form-input min-h-[200px]" placeholder="The soul of the rug... weave, history, and craftsmanship details."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Pricing -->
+            <section id="section-pricing" class="space-y-12">
+                <div class="border-b border-heritage-border pb-4">
+                    <h2 class="font-serif text-3xl italic">Pricing & Inventory</h2>
+                </div>
+                <div class="grid grid-cols-3 gap-12">
+                    <div>
+                        <label class="form-label">Base Price (INR)</label>
+                        <input type="number" id="price" name="price" class="form-input font-bold" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label class="form-label">Discount Price (INR)</label>
+                        <input type="number" id="discount_price" name="discount_price" class="form-input font-bold" placeholder="Optional">
+                    </div>
+                    <div>
+                        <label class="form-label">SKU</label>
+                        <input type="text" id="sku" name="sku" class="form-input" placeholder="Kalakroti-SILK-001">
+                    </div>
+                    <div>
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number" id="stock_quantity" name="stock_quantity" class="form-input">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Media -->
+            <section id="section-media" class="space-y-12">
+                <div class="border-b border-heritage-border pb-4">
+                    <h2 class="font-serif text-3xl italic">Product Media</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-12">
+                    <div>
+                        <label class="form-label">Main Image URL</label>
+                        <input type="text" id="main_image" name="main_image" class="form-input" placeholder="/images/hero-1-bc2ca9.png">
+                    </div>
+                    <div>
+                        <label class="form-label">Hover Image URL</label>
+                        <input type="text" id="hover_image" name="hover_image" class="form-input" placeholder="/images/hero-2-c8798d.png">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Specs -->
+            <section id="section-specs" class="space-y-12">
+                <div class="border-b border-heritage-border pb-4">
+                    <h2 class="font-serif text-3xl italic">Rug Specifications</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-12">
+                    <div>
+                        <label class="form-label">Size</label>
+                        <input type="text" id="size" name="size" class="form-input" placeholder="e.g. 8x10 ft">
+                    </div>
+                    <div>
+                        <label class="form-label">Knot Density</label>
+                        <input type="text" id="knot_density" name="knot_density" class="form-input" placeholder="e.g. 1.2M knots/sqm">
+                    </div>
+                    <div>
+                        <label class="form-label">Origin</label>
+                        <input type="text" id="origin" name="origin" class="form-input" placeholder="e.g. Bhadohi, India">
+                    </div>
+                    <div>
+                        <label class="form-label">Material</label>
+                        <input type="text" id="material" name="material" class="form-input" placeholder="e.g. Mulberry Silk">
+                    </div>
+                    <div>
+                        <label class="form-label">Pattern Style</label>
+                        <input type="text" id="pattern_style" name="pattern_style" class="form-input" placeholder="e.g. Floral">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Story -->
+            <section id="section-story" class="space-y-12 bg-white/40 p-12 rounded-3xl border border-heritage-border/30">
+                <div class="border-b border-heritage-border pb-4">
+                    <h2 class="font-serif text-3xl italic">Artisan Story</h2>
+                </div>
+                <div>
+                    <label class="form-label">The Craft Story</label>
+                    <textarea id="craft_story" name="craft_story" class="form-input min-h-[150px]" placeholder="Detailed narrative..."></textarea>
+                </div>
+            </section>
+        </form>
+    </main>
+
+    <script>
+        const API_URL = (window.KALAKROTI_API_BASE_URL || '/api') + '/products/';
+
+        // Fetch Products
+        async function fetchProducts() {
+            try {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                const products = data.results ?? data;
+                const list = document.getElementById('product-list');
+                list.innerHTML = products.map(p => `
+                    <div onclick="loadProduct(${p.id})" class="flex gap-4 p-3 hover:bg-heritage-beige rounded-xl cursor-pointer transition-all border border-transparent hover:border-heritage-border/50 group">
+                        <img src="${p.main_image}" class="w-12 h-12 object-cover rounded shadow-sm group-hover:scale-105 transition-transform">
+                        <div class="overflow-hidden">
+                            <h4 class="text-[10px] uppercase font-bold truncate">${p.title}</h4>
+                            <p class="text-[9px] text-heritage-dark/40 font-mono">₹${parseFloat(p.price).toLocaleString()}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        // Load into Form
+        async function loadProduct(id) {
+            const res = await fetch(`${API_URL}${id}/`);
+            const p = await res.json();
+            document.getElementById('product-id').value = p.id;
+            document.getElementById('title').value = p.title;
+            document.getElementById('description').value = p.description;
+            document.getElementById('short_description').value = p.short_description;
+            document.getElementById('price').value = p.price;
+            document.getElementById('discount_price').value = p.discount_price || '';
+            document.getElementById('sku').value = p.sku;
+            document.getElementById('stock_quantity').value = p.stock_quantity;
+            document.getElementById('main_image').value = p.main_image;
+            document.getElementById('hover_image').value = p.hover_image || '';
+            document.getElementById('size').value = p.size;
+            document.getElementById('knot_density').value = p.knot_density;
+            document.getElementById('origin').value = p.origin;
+            document.getElementById('material').value = p.material;
+            document.getElementById('pattern_style').value = p.pattern_style || '';
+            document.getElementById('craft_story').value = p.craft_story;
+        }
+
+        // Save Function
+        async function saveProduct(status = 'published') {
+            const id = document.getElementById('product-id').value;
+            if(!id) return showStatus('Select a product to update first', true);
+
+            const formData = new FormData(document.getElementById('product-form'));
+            const data = Object.fromEntries(formData.entries());
+            data.status = status;
+            ['discount_price', 'hover_image', 'knot_density', 'pattern_style'].forEach(key => {
+                if (data[key] === '') data[key] = null;
+            });
+
+            try {
+                const res = await fetch(`${API_URL}${id}/`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if(res.ok) {
+                    showStatus(status === 'draft' ? 'Draft saved.' : 'Curation synchronized successfully.');
+                    fetchProducts();
+                } else {
+                    const err = await res.json();
+                    showStatus(err.detail || 'Could not save product.', true);
+                }
+            } catch (e) {
+                console.error(e);
+                showStatus('Could not reach the curation API.', true);
+            }
+        }
+
+        function switchSection(id) {
+            document.querySelectorAll('.section-tab').forEach(b => b.classList.remove('active', 'text-heritage-dark'));
+            event.target.classList.add('active', 'text-heritage-dark');
+            const section = document.getElementById(`section-${id}`);
+            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function showStatus(message, isError = false) {
+            const statusEl = document.getElementById('bulk-status');
+            if (!statusEl) return;
+            statusEl.textContent = message;
+            statusEl.className = `text-xs leading-relaxed ${isError ? 'text-heritage-rust' : 'text-heritage-dark/50'}`;
+        }
+
+        function parseCsv(text) {
+            const rows = [];
+            let row = [];
+            let field = '';
+            let quoted = false;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const next = text[i + 1];
+                if (char === '"' && quoted && next === '"') {
+                    field += '"';
+                    i++;
+                } else if (char === '"') {
+                    quoted = !quoted;
+                } else if (char === ',' && !quoted) {
+                    row.push(field.trim());
+                    field = '';
+                } else if ((char === '\n' || char === '\r') && !quoted) {
+                    if (char === '\r' && next === '\n') i++;
+                    row.push(field.trim());
+                    if (row.some(Boolean)) rows.push(row);
+                    row = [];
+                    field = '';
+                } else {
+                    field += char;
+                }
+            }
+            row.push(field.trim());
+            if (row.some(Boolean)) rows.push(row);
+
+            const headers = rows.shift()?.map(h => h.trim()) || [];
+            return rows.map(values => Object.fromEntries(headers.map((header, i) => [header, values[i] || ''])));
+        }
+
+        async function importCsv() {
+            const file = document.getElementById('bulk-file')?.files?.[0];
+            if (!file) return showStatus('Choose a CSV file first.', true);
+
+            try {
+                showStatus('Reading CSV...');
+                const rows = parseCsv(await file.text());
+                const res = await fetch(`${window.KALAKROTI_API_BASE_URL || '/api'}/products/bulk-import/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ rows })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Bulk import failed');
+
+                const errorText = data.errors?.length ? ` ${data.errors.length} rows need review.` : '';
+                showStatus(`Imported ${data.imported}, updated ${data.updated}.${errorText}`);
+                fetchProducts();
+            } catch (e) {
+                console.error(e);
+                showStatus(e.message, true);
+            }
+        }
+
+        function downloadCsvTemplate() {
+            const headers = ['title','sku','category','price','discount_price','stock_quantity','main_image','size','material','origin','pattern_style','tags','short_description','description'];
+            const sample = ['Jaipur Garden Wool Rug','KALA-JAI-001','Woolen Rugs','24999','19999','4','/images/hero-1-bc2ca9.png','8x10 ft','Handwoven Wool','Jaipur, India','Floral','Living Room,Traditional','Handwoven garden-inspired rug','A refined handwoven rug with heritage detailing.'];
+            const csv = `${headers.join(',')}\n${sample.map(value => `"${String(value).replaceAll('"', '""')}"`).join(',')}\n`;
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'kalakroti-products-template.csv';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+    </script>
+
+</body>
+</html>
+

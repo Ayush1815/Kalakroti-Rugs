@@ -1,0 +1,99 @@
+# Kalakroti Rugs / Kalakroti Rugs - Admin & Operations Manual
+
+This document provides comprehensive instructions on how to manage, operate, and maintain the Kalakroti Rugs e-commerce platform.
+
+## 1. Overview
+Kalakroti Rugs is a premium e-commerce platform built on a Django backend and a custom vanilla JavaScript/HTML frontend. It uses Django Rest Framework (DRF) for its API, SQLite (development) or PostgreSQL (production) for the database, and integrates with Razorpay for payment processing.
+
+---
+
+## 2. Product Management
+Products are managed via the Django Admin panel. Access it by navigating to `http://localhost:8000/admin`.
+*   **Default Username:** `admin`
+*   **Default Password:** `admin123`
+*(Note: You can change this password inside the admin panel under Users > Authentication and Authorization).*
+
+### Managing Products (Add / Update / Delete)
+Currently, all product management is handled securely through the Django Admin backend (there is no frontend management dashboard for security reasons).
+
+**To Add a New Product:**
+1. Navigate to `http://localhost:8000/admin` and log in.
+2. Under the **Api** section, click on **Products**, then click the **Add Product** button in the top right.
+3. Fill in the required fields (Title, Category, Price, Main Image URL, etc.).
+4. Click **Save**. The product will immediately become visible on the frontend.
+
+**To Update/Edit a Product:**
+1. In the Django Admin, go to **Products**.
+2. Search for the product by name or SKU using the search bar, or find it in the list.
+3. Click on the product's title to open its details.
+4. Make your changes (e.g., change `discount_price` or update `stock_quantity`).
+5. Click **Save**.
+
+**To Drop/Delete or Archive a Product:**
+*   **Soft Delete (Recommended):** Open the product and change its `status` from 'Published' to 'Archived'. This removes it from the frontend but keeps the data.
+*   **Hard Delete:** In the Products list, check the box next to the product(s), select "Delete selected products" from the **Action** dropdown, and click **Go**. Or, click into the product and click the red **Delete** button at the bottom.
+
+### Key Product Attributes
+When adding or editing a rug in the system, consider the following fields:
+
+*   **Core Info:** `Category` (e.g., Silk Carpets, Woolen Rugs), `Collection`, `Title`, and `Description`. The `slug` and `sku` are auto-generated if left blank.
+*   **Pricing & Inventory:**
+    *   `price`: The original, higher base price (strike-through on frontend).
+    *   `discount_price`: The actual selling price.
+    *   `stock_quantity` & `stock_status`: Must be maintained for inventory control.
+*   **Merchandising Flags:**
+    *   `is_featured`: If checked, the product appears in the "Top Picks" section on the homepage (limited to 8 dynamically).
+    *   `is_new_arrival` & `is_best_seller`: Used for categorization and filtering in the Shop view.
+*   **Specifications:** High-end rugs require detailed specs. Ensure you fill out `size` (e.g., "8x10 ft"), `material` (e.g., "High-Land Wool"), `weave_type` (e.g., "Hand-Knotted"), and `origin`.
+*   **Media:**
+    *   `main_image`: The primary image shown in grids. Images must be referenced via relative paths (e.g., `/images/my-rug-hash.jpg`) for environment compatibility.
+    *   `hover_image`: An optional secondary image for hover effects.
+
+### Tags and Navigation
+The frontend uses `Tags` to drive the "Shop By Room", "Shop By Style", and "Shop By Shape" tabs. Ensure products are correctly tagged (e.g., "Living Room", "Modern", "Rectangular") so they appear in these dynamically filtered sections.
+
+---
+
+## 3. Image Asset Standards
+To prevent caching issues, cross-environment broken links, and SEO penalties, all uploaded images MUST adhere to the project's standardized naming convention.
+
+*   **Format:** Slug-based lowercase names with a unique alphanumeric hash.
+*   **Pattern:** `<product-name-slug>-<unique-hash>.<ext>`
+*   **Example:** `vintage-kilim-runner-a7x2.jpg`
+*   **No Spaces:** Do not upload files with spaces (`%20`). They will break on certain hosting platforms.
+
+---
+
+## 4. Order & Payment Operations
+The platform simulates checkout logic locally but integrates Razorpay for live payments.
+
+*   **Payment Flow:** When a user checks out, an order ID is generated. The system communicates with the `/api/create_payment/` endpoint to initialize Razorpay.
+*   **Order Management:** Check the `Orders` section in the Django Admin to view incoming purchases. Update the `status` (Pending -> Processed -> Shipped -> Delivered) manually as fulfillment progresses.
+
+---
+
+## 5. Deployment & Technical Maintenance
+
+### Starting the Server (Quick Start)
+For detailed step-by-step setup, refer to the **[LAUNCH_GUIDE.md](file:///d:/Placement/Rugs%20and%20Antiques%20-%20Copy/LAUNCH_GUIDE.md)** in the project root.
+Quick command:
+1. `cd aura_backend`
+2. `.venv\Scripts\Activate`
+3. `python manage.py runserver`
+
+### Database Seeding
+If you need to reset the store with demo data, use the seed script:
+`python seed.py`
+*Warning: This deletes all existing categories, products, collections, and tags before recreating them.*
+
+### API & Routing
+*   The frontend uses a Single Page Application (SPA) style router via `handleRoute()` in `app.js`.
+*   Django's `urls.py` is configured to catch-all non-API routes and serve `index.html`.
+*   If static files or images (like `/images/rug.jpg`) return a 404, verify that the `MEDIA_URL` and `STATIC_URL` patterns are listed *before* the catch-all route in `urls.py`.
+
+---
+
+## 6. Frontend Content Customization
+To change static copy on the homepage (like the "Design Your Dream Rug" section or the Hero Banner), you must directly edit `index.html`. 
+Categories shown on the homepage are pulled dynamically via the API, so modifying a Category name or image in Django Admin will automatically reflect on the frontend.
+
