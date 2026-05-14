@@ -912,7 +912,7 @@ function switchShopTab(tab) {
     container.innerHTML = items.map(item => `
         <div class="group relative aspect-[4/5] overflow-hidden rounded-sm cursor-pointer" 
              onclick="navigateTo(event, '/${tab}/${item.slug}')">
-            <img src="/images/${item.img}" class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110 grayscale-[10%] group-hover:grayscale-0">
+            <img src="/static/images/${item.img}" class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110 grayscale-[10%] group-hover:grayscale-0">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
             <div class="absolute bottom-8 left-0 right-0 text-center">
                 <span class="font-serif text-xl text-white tracking-wide">${item.name}</span>

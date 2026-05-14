@@ -679,7 +679,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .split-image {
     flex: 1.2;
     min-height: 500px;
-    background: url('http://localhost:8000/images/silk-carpets-e7427e.jpg') center/cover;
+    background: url('/static/images/silk-carpets-e7427e.jpg') center/cover;
 }
 
 .split-content {

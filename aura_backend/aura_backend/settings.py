@@ -55,7 +55,7 @@ ROOT_URLCONF = 'aura_backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.parent],
+        'DIRS': [BASE_DIR.parent / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,16 +103,10 @@ USE_TZ = True
 # Static & Media files (served via Django in dev, WhiteNoise in prod)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles_production'
-# Only search the root directory for specific frontend assets to avoid recursion
+
+# Standard Django structure: search in the 'static' folder at root
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR.parent, 'index.html'),
-    os.path.join(BASE_DIR.parent, 'dashboard.html'),
-    os.path.join(BASE_DIR.parent, 'admin.html'),
-    os.path.join(BASE_DIR.parent, 'help-center.html'),
-    os.path.join(BASE_DIR.parent, 'app.js'),
-    os.path.join(BASE_DIR.parent, 'style.css'),
-    os.path.join(BASE_DIR.parent, 'loader.js'),
-    os.path.join(BASE_DIR.parent, 'loader.css'),
+    BASE_DIR.parent / 'static',
 ]
 MEDIA_URL = '/images/'
 MEDIA_ROOT = BASE_DIR / 'images'

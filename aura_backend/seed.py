@@ -33,16 +33,16 @@ collections = [Collection.objects.create(name=n) for n in col_names]
 
 # Create Categories
 cat_data = [
-    {"name": "Silk Carpets", "image_url": "/images/hero-1-bc2ca9.png", "order": 1},
-    {"name": "Woolen Rugs", "image_url": "/images/hero-2-c8798d.png", "order": 2},
-    {"name": "Vintage Kilims", "image_url": "/images/hero-4-8cbbc2.png", "order": 3},
-    {"name": "Modern Abstracts", "image_url": "/images/silk-carpets-e7427e.jpg", "order": 4}
+    {"name": "Silk Carpets", "image_url": "/static/images/hero-1-bc2ca9.png", "order": 1},
+    {"name": "Woolen Rugs", "image_url": "/static/images/hero-2-c8798d.png", "order": 2},
+    {"name": "Vintage Kilims", "image_url": "/static/images/hero-4-8cbbc2.png", "order": 3},
+    {"name": "Modern Abstracts", "image_url": "/static/images/silk-carpets-e7427e.jpg", "order": 4}
 ]
 categories = {data["name"]: Category.objects.create(**data) for data in cat_data}
 
 # Get images
 from django.conf import settings
-img_dir = settings.BASE_DIR / 'images' / 'Rug_Car'
+img_dir = settings.BASE_DIR.parent / 'static' / 'images' / 'Rug_Car'
 all_images = []
 for ext in ['*.jpg', '*.png', '*.jpeg', '*.JPG', '*.PNG', '*.JPEG']:
     all_images.extend(list(img_dir.glob(f'**/{ext}')))
