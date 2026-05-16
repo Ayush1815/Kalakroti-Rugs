@@ -198,6 +198,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = {
         'category': ['exact'],
+        'category__slug': ['exact'],
         'slug': ['exact'],
         'price': ['gte', 'lte'],
         'material': ['exact'],

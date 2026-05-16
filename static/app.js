@@ -1,6 +1,6 @@
-// ─────────────────────────────────────────────
-// Kalakroti Rugs – Frontend Engine v4.0 (Shopping Suite)
-// ─────────────────────────────────────────────
+﻿// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Kalakroti Rugs â€“ Frontend Engine v4.0 (Shopping Suite)
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const API_BASE_URL = window.KALAKROTI_API_BASE_URL || '/api';
 
@@ -17,11 +17,77 @@ let activeFilters = {
     space: [],
     shape: [],
     size: [],
+    material: [],
     price_min: 0,
     price_max: 100000,
     search: null,
     sort: '-created_at'
 };
+
+const FALLBACK_CATEGORIES = [
+    { id: 1, name: 'Silk Carpets', slug: 'silk-carpets', image_url: '/static/images/silk-carpets-e7427e.jpg', order: 1 },
+    { id: 2, name: 'Woolen Rugs', slug: 'woolen-rugs', image_url: '/static/images/woolen-rugs-28654e.jpg', order: 2 },
+    { id: 3, name: 'Vintage Kilims', slug: 'vintage-kilims', image_url: '/static/images/vintage-kilims-3112c8.jpg', order: 3 },
+    { id: 4, name: 'Modern Abstracts', slug: 'modern-abstracts', image_url: '/static/images/modern-abstracts-3813de.jpg', order: 4 }
+];
+
+const FALLBACK_PRODUCTS = [
+    { id: 9001, category: 1, category_name: 'Silk Carpets', category_slug: 'silk-carpets', title: 'Sapphire Medallion Silk Carpet', slug: 'sapphire-medallion-silk-carpet', short_description: 'A luminous silk statement rug with a classical medallion field.', description: 'A luminous silk statement rug inspired by heirloom Persian medallions and finished for refined contemporary rooms.', price: 148000, discount_price: 118000, sku: 'KALA-SILK-001', stock_quantity: 4, main_image: '/static/images/silk-carpets-e7427e.jpg', hover_image: '/static/images/hero-3-26995d.jpg', size: '8x10 ft', shape: 'Rectangle', space: 'Living Room', material: 'Mulberry Silk', origin: 'Kashmir, India', pattern_style: 'Traditional', is_featured: true, is_new_arrival: true, is_best_seller: true, gallery: [], variants: [], reviews: [], tags: [{ name: 'Traditional' }, { name: 'Living Room' }] },
+    { id: 9002, category: 2, category_name: 'Woolen Rugs', category_slug: 'woolen-rugs', title: 'Amber Garden Hand-Knotted Wool Rug', slug: 'amber-garden-hand-knotted-wool-rug', short_description: 'Warm botanical wool craft for layered homes.', description: 'Hand-knotted wool brings a soft amber palette to a garden-inspired pattern suited to lounges, studies, and bedrooms.', price: 62000, discount_price: 49900, sku: 'KALA-WOOL-002', stock_quantity: 7, main_image: '/static/images/hero-1-bc2ca9.png', hover_image: '/static/images/woolen-rugs-28654e.jpg', size: '6x9 ft', shape: 'Rectangle', space: 'Bedroom', material: 'Highland Wool', origin: 'Jaipur, India', pattern_style: 'Floral', is_featured: true, is_new_arrival: true, is_best_seller: false, gallery: [], variants: [], reviews: [], tags: [{ name: 'Floral' }, { name: 'Bedroom' }] },
+    { id: 9003, category: 3, category_name: 'Vintage Kilims', category_slug: 'vintage-kilims', title: 'Rust Nomad Vintage Kilim', slug: 'rust-nomad-vintage-kilim', short_description: 'Flatwoven kilim with softened heritage tones.', description: 'A flatwoven vintage kilim with rust, ochre, and charcoal geometry for relaxed dining rooms and hallways.', price: 42000, discount_price: 34900, sku: 'KALA-KILIM-003', stock_quantity: 5, main_image: '/static/images/vintage-kilims-3112c8.jpg', hover_image: '/static/images/hero-4-8cbbc2.png', size: '5x8 ft', shape: 'Rectangle', space: 'Dining Room', material: 'Wool Cotton Blend', origin: 'Mirzapur, India', pattern_style: 'Geometric', is_featured: true, is_new_arrival: false, is_best_seller: true, gallery: [], variants: [], reviews: [], tags: [{ name: 'Geometric' }, { name: 'Dining Room' }] },
+    { id: 9004, category: 4, category_name: 'Modern Abstracts', category_slug: 'modern-abstracts', title: 'Ivory Abstract Studio Rug', slug: 'ivory-abstract-studio-rug', short_description: 'A quiet abstract rug for modern spaces.', description: 'A low-contrast abstract composition in ivory, smoke, and charcoal, built for offices and contemporary bedrooms.', price: 54000, discount_price: 45900, sku: 'KALA-MOD-004', stock_quantity: 6, main_image: '/static/images/modern-abstracts-3813de.jpg', hover_image: '/static/images/style-modern.png', size: '8x10 ft', shape: 'Rectangle', space: 'Office', material: 'Wool and Viscose', origin: 'Bhadohi, India', pattern_style: 'Abstract', is_featured: true, is_new_arrival: true, is_best_seller: false, gallery: [], variants: [], reviews: [], tags: [{ name: 'Modern' }, { name: 'Office' }] },
+    { id: 9005, category: 2, category_name: 'Woolen Rugs', category_slug: 'woolen-rugs', title: 'Indigo Courtyard Wool Rug', slug: 'indigo-courtyard-wool-rug', short_description: 'Deep indigo wool for formal living rooms.', description: 'Dense wool pile and a courtyard-inspired border make this rug a strong anchor for formal seating arrangements.', price: 76000, discount_price: 62900, sku: 'KALA-WOOL-005', stock_quantity: 3, main_image: '/static/images/hero-3-26995d.jpg', hover_image: '/static/images/Rug_Car/50/dsc-6014-042bcc.jpg', size: '9x12 ft', shape: 'Rectangle', space: 'Living Room', material: 'Highland Wool', origin: 'Varanasi, India', pattern_style: 'Traditional', is_featured: true, is_new_arrival: false, is_best_seller: true, gallery: [], variants: [], reviews: [], tags: [{ name: 'Traditional' }, { name: 'Living Room' }] },
+    { id: 9006, category: 3, category_name: 'Vintage Kilims', category_slug: 'vintage-kilims', title: 'Ochre Runner Kilim', slug: 'ochre-runner-kilim', short_description: 'A slim flatweave runner for corridors.', description: 'A durable flatweave runner with ochre and brick motifs, ideal for hallways and transitional spaces.', price: 28000, discount_price: 22900, sku: 'KALA-RUN-006', stock_quantity: 8, main_image: '/static/images/Rug_Car/25/dsc-5790-f53492.jpg', hover_image: '/static/images/Rug_Car/25/dsc-5791-14ce62.jpg', size: '2.5x8 ft', shape: 'Runner', space: 'Hallway', material: 'Handspun Wool', origin: 'Mirzapur, India', pattern_style: 'Geometric', is_featured: false, is_new_arrival: true, is_best_seller: false, gallery: [], variants: [], reviews: [], tags: [{ name: 'Runner' }, { name: 'Hallway' }] },
+    { id: 9007, category: 1, category_name: 'Silk Carpets', category_slug: 'silk-carpets', title: 'Pearl Round Silk Accent Rug', slug: 'pearl-round-silk-accent-rug', short_description: 'A round silk accent for intimate corners.', description: 'Soft pearl silk and a compact round silhouette create a polished accent for bedrooms, foyers, and reading corners.', price: 58000, discount_price: 49900, sku: 'KALA-SILK-007', stock_quantity: 4, main_image: '/static/images/Rug_Car/35/dsc-5870-ab8210.jpg', hover_image: '/static/images/Rug_Car/35/dsc-5871-07b3d8.jpg', size: '6 ft round', shape: 'Round', space: 'Bedroom', material: 'Mulberry Silk', origin: 'Kashmir, India', pattern_style: 'Floral', is_featured: false, is_new_arrival: true, is_best_seller: false, gallery: [], variants: [], reviews: [], tags: [{ name: 'Round' }, { name: 'Bedroom' }] },
+    { id: 9008, category: 4, category_name: 'Modern Abstracts', category_slug: 'modern-abstracts', title: 'Charcoal Minimal Square Rug', slug: 'charcoal-minimal-square-rug', short_description: 'A square minimal rug for compact spaces.', description: 'A restrained charcoal square rug with a crisp hand-tufted surface for compact offices and lounge corners.', price: 39000, discount_price: 31900, sku: 'KALA-MOD-008', stock_quantity: 5, main_image: '/static/images/Rug_Car/29/dsc-5822-3da877.jpg', hover_image: '/static/images/Rug_Car/29/dsc-5823-cca7e4.jpg', size: '6x6 ft', shape: 'Square', space: 'Office', material: 'Wool and Cotton', origin: 'Bhadohi, India', pattern_style: 'Minimal', is_featured: false, is_new_arrival: false, is_best_seller: true, gallery: [], variants: [], reviews: [], tags: [{ name: 'Minimal' }, { name: 'Office' }] }
+];
+
+function normalizeProducts(data) {
+    const products = data.results ?? data;
+    return Array.isArray(products) ? products.map(p => ({
+        ...p,
+        category_slug: p.category_slug || FALLBACK_CATEGORIES.find(c => c.id === p.category)?.slug || slugifyText(p.category_name || ''),
+        price: Number(p.price || 0),
+        discount_price: p.discount_price === null || p.discount_price === undefined || p.discount_price === '' ? null : Number(p.discount_price)
+    })) : [];
+}
+
+function slugifyText(value) {
+    return String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function filterFallbackProducts() {
+    let products = [...FALLBACK_PRODUCTS];
+    if (activeFilters.search) {
+        const q = activeFilters.search.toLowerCase();
+        products = products.filter(p => [p.title, p.description, p.material, p.origin, p.category_name, p.space, p.shape, p.pattern_style].some(v => String(v || '').toLowerCase().includes(q)));
+    }
+    if (activeFilters.category_slug) products = products.filter(p => p.category_slug === activeFilters.category_slug);
+    if (activeFilters.style) products = products.filter(p => [p.pattern_style, ...(p.tags || []).map(t => t.name)].some(v => slugifyText(v) === slugifyText(activeFilters.style)));
+    if (activeFilters.room) products = products.filter(p => slugifyText(p.space).includes(slugifyText(activeFilters.room)));
+    if (activeFilters.price_min > 0) products = products.filter(p => Number(p.discount_price || p.price) >= activeFilters.price_min);
+    if (activeFilters.price_max < 100000) products = products.filter(p => Number(p.discount_price || p.price) <= activeFilters.price_max);
+    ['space', 'shape', 'size', 'material'].forEach(field => {
+        if (activeFilters[field]?.length) products = products.filter(p => activeFilters[field].some(v => String(p[field] || '').toLowerCase().includes(v.toLowerCase())));
+    });
+    if (activeFilters.sort === 'price') products.sort((a, b) => Number(a.discount_price || a.price) - Number(b.discount_price || b.price));
+    else if (activeFilters.sort === '-price') products.sort((a, b) => Number(b.discount_price || b.price) - Number(a.discount_price || a.price));
+    else if (activeFilters.sort === 'title') products.sort((a, b) => a.title.localeCompare(b.title));
+    else products.sort((a, b) => b.id - a.id);
+    return products;
+}
+
+async function fetchCatalogProducts(url, options = {}) {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`API ${res.status}`);
+        const products = normalizeProducts(await res.json());
+        if (products.length || options.allowEmpty) return { products, source: 'api' };
+    } catch (err) {
+        console.warn('Catalog API unavailable, using fallback catalog:', err.message);
+    }
+    return { products: options.filteredFallback ? filterFallbackProducts() : [...FALLBACK_PRODUCTS], source: 'fallback' };
+}
 
 function getAuthToken() {
     return currentUser?.token || localStorage.getItem('Kalakroti_auth_token') || '';
@@ -98,7 +164,7 @@ async function loadPublicConfig() {
     return publicConfig;
 }
 
-// ── Router & Navigation ───────────────────────
+// â”€â”€ Router & Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function handleRoute() {
     const path = window.location.pathname;
@@ -112,6 +178,7 @@ function handleRoute() {
         space: searchParams.get('space')?.split(',') || [],
         shape: searchParams.get('shape')?.split(',') || [],
         size: searchParams.get('size')?.split(',') || [],
+        material: searchParams.get('material')?.split(',') || [],
         price_min: parseInt(searchParams.get('min_price')) || 0,
         price_max: parseInt(searchParams.get('max_price')) || 100000,
         search: searchParams.get('q'),
@@ -220,7 +287,7 @@ function showView(id) {
     if (view) view.style.display = 'block';
 }
 
-// ── UI Helpers ────────────────────────────────
+// â”€â”€ UI Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function updateSEO(title, description) {
     document.title = `${title} | Kalakroti Rugs`;
@@ -277,10 +344,10 @@ function closeAllSidebars() {
     document.body.style.overflow = '';
 }
 
-// ── Help FAB (Fixed Bottom Right - CSS handles position) ──
+// â”€â”€ Help FAB (Fixed Bottom Right - CSS handles position) â”€â”€
 function initFAB() {
     // FAB is now fixed via CSS (bottom: 32px; right: 32px)
-    // No drag needed — clean, always accessible
+    // No drag needed â€” clean, always accessible
     const fab = document.getElementById('help-fab');
     if (!fab) return;
     // Pulse animation on first visit
@@ -298,7 +365,7 @@ function handleContact(e) {
     e.target.reset();
 }
 
-// ── Account Suite ─────────────────────────────
+// â”€â”€ Account Suite â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function toggleAccountForm(isRegister) {
     document.getElementById('login-form-container').style.display = isRegister ? 'none' : 'block';
@@ -400,10 +467,10 @@ document.addEventListener('keydown', e => {
     }
 });
 
-// ── Shopping Suite ────────────────────────────
+// â”€â”€ Shopping Suite â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function formatPrice(val) {
-    return `₹${parseFloat(val).toLocaleString('en-IN')}`;
+    return `â‚¹${parseFloat(val).toLocaleString('en-IN')}`;
 }
 
 function updateCart(shouldSync = true) {
@@ -437,7 +504,7 @@ function updateCart(shouldSync = true) {
                 <p class="text-sm text-heritage-gold font-bold mb-4">${formatPrice(item.discount_price || item.price)}</p>
                 <div class="flex items-center gap-4">
                     <div class="flex items-center border border-heritage-dark/10">
-                        <button onclick="changeQty(${i}, -1)" class="w-8 h-8 flex items-center justify-center hover:bg-heritage-dark hover:text-white transition-colors">−</button>
+                        <button onclick="changeQty(${i}, -1)" class="w-8 h-8 flex items-center justify-center hover:bg-heritage-dark hover:text-white transition-colors">âˆ’</button>
                         <span class="w-8 text-center text-xs font-bold">${item.qty || 1}</span>
                         <button onclick="changeQty(${i}, 1)"  class="w-8 h-8 flex items-center justify-center hover:bg-heritage-dark hover:text-white transition-colors">+</button>
                     </div>
@@ -480,7 +547,7 @@ function removeFromCart(i) {
     showToast('Removed from cart');
 }
 
-// ── Checkout & Razorpay ────────────────────────
+// â”€â”€ Checkout & Razorpay â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function updateCheckoutSummary() {
     const container = document.getElementById('checkout-summary-items');
@@ -678,7 +745,7 @@ async function handleCheckout(e) {
     }
 }
 
-// ── Order Tracking & Processing Overlay ───────
+// â”€â”€ Order Tracking & Processing Overlay â”€â”€â”€â”€â”€â”€â”€
 
 function showProcessingOverlay(status) {
     if (typeof KalakrotiLoader !== 'undefined') {
@@ -764,7 +831,7 @@ async function handleTrackOrder(e) {
     }
 }
 
-// ── Wishlist Suite ────────────────────────────
+// â”€â”€ Wishlist Suite â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function updateWishlist(shouldSync = true) {
     localStorage.setItem('Kalakroti_wishlist', JSON.stringify(wishlist));
@@ -807,7 +874,7 @@ function removeFromWishlist(i) {
     updateWishlist(); 
 }
 
-// ── Home View Logic ───────────────────────────
+// â”€â”€ Home View Logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function initHome() {
     fetchFeaturedProducts();
@@ -826,13 +893,13 @@ const shopTabData = {
         { name: "Modern", img: "style-modern.png", slug: "modern" },
         { name: "Vintage", img: "vintage-kilims-3112c8.jpg", slug: "vintage" },
         { name: "Bohemian", img: "hero-4-8cbbc2.png", slug: "bohemian" },
-        { name: "Traditional", img: "cat-living.png", slug: "traditional" }
+        { name: "Traditional", img: "cat-living.png", slug: "traditional" }, { name: "Minimalist", img: "style_minimalist.png", slug: "minimalist" }
     ],
     material: [
         { name: "Wool", img: "woolen-rugs-28654e.jpg", slug: "wool" },
         { name: "Bamboo Silk", img: "silk-carpets-e7427e.jpg", slug: "silk" },
         { name: "Jute", img: "hero-1-bc2ca9.png", slug: "jute" },
-        { name: "Cotton", img: "cat-bedroom.png", slug: "cotton" }
+        { name: "Cotton", img: "cat-bedroom.png", slug: "cotton" }, { name: "Sisal", img: "material_sisal.png", slug: "sisal" }
     ]
 };
 
@@ -866,7 +933,7 @@ function switchShopTab(tab) {
     `).join('');
 }
 
-// ── Results View Logic ────────────────────────
+// â”€â”€ Results View Logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function updateResultsHeader(title, subtitle) {
     const t = document.getElementById('results-title');
@@ -898,16 +965,14 @@ async function fetchResults() {
     if (activeFilters.space.length) activeFilters.space.forEach(s => url += `&space__icontains=${encodeURIComponent(s)}`);
     if (activeFilters.shape.length) activeFilters.shape.forEach(s => url += `&shape__icontains=${encodeURIComponent(s)}`);
     if (activeFilters.size.length) activeFilters.size.forEach(s => url += `&size__icontains=${encodeURIComponent(s)}`);
+    if (activeFilters.material.length) activeFilters.material.forEach(s => url += `&material=${encodeURIComponent(s)}`);
 
     try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`API ${res.status}`);
-        const data = await res.json();
-        const products = data.results ?? data;
+        const { products, source } = await fetchCatalogProducts(url, { filteredFallback: true });
         renderProducts(products, grid);
         const countEl = document.getElementById('results-count');
-        if (countEl) countEl.innerText = `Showing ${products.length} product${products.length !== 1 ? 's' : ''}`;
-        populateSidebarFilters(products);
+        if (countEl) countEl.innerText = `Showing ${products.length} product${products.length !== 1 ? 's' : ''}${source === 'fallback' ? ' from curated picks' : ''}`;
+        populateSidebarFilters(source === 'fallback' ? FALLBACK_PRODUCTS : products);
     } catch (e) {
         console.error('fetchResults error:', e);
         grid.innerHTML = '<div class="col-span-3 text-center py-20 text-heritage-dark/40">Unable to load products. Please try again.</div>';
@@ -923,6 +988,7 @@ function applyFilters() {
     activeFilters.space = getChecked('#filter-space input');
     activeFilters.shape = getChecked('#filter-shape input');
     activeFilters.size = getChecked('#filter-size input');
+    activeFilters.material = getChecked('#filter-materials input');
 
     // Update URL without full reload
     const params = new URLSearchParams();
@@ -935,6 +1001,7 @@ function applyFilters() {
     if (activeFilters.space.length) params.set('space', activeFilters.space.join(','));
     if (activeFilters.shape.length) params.set('shape', activeFilters.shape.join(','));
     if (activeFilters.size.length) params.set('size', activeFilters.size.join(','));
+    if (activeFilters.material.length) params.set('material', activeFilters.material.join(','));
     if (activeFilters.sort !== '-created_at') params.set('sort', activeFilters.sort);
 
     const newUrl = `${window.location.pathname}?${params.toString()}`;
@@ -956,30 +1023,35 @@ function renderFilterChips() {
     if (activeFilters.room) chips.push({ label: `Room: ${activeFilters.room}`, key: 'room' });
     if (activeFilters.price_min > 0 || activeFilters.price_max < 100000) {
         let label = 'Price: ';
-        if (activeFilters.price_min > 0 && activeFilters.price_max < 100000) label += `₹${(activeFilters.price_min/1000).toFixed(0)}k-₹${(activeFilters.price_max/1000).toFixed(0)}k`;
-        else if (activeFilters.price_min > 0) label += `Over ₹${(activeFilters.price_min/1000).toFixed(0)}k`;
-        else label += `Under ₹${(activeFilters.price_max/1000).toFixed(0)}k`;
+        if (activeFilters.price_min > 0 && activeFilters.price_max < 100000) label += `â‚¹${(activeFilters.price_min/1000).toFixed(0)}k-â‚¹${(activeFilters.price_max/1000).toFixed(0)}k`;
+        else if (activeFilters.price_min > 0) label += `Over â‚¹${(activeFilters.price_min/1000).toFixed(0)}k`;
+        else label += `Under â‚¹${(activeFilters.price_max/1000).toFixed(0)}k`;
         chips.push({ label, key: 'price' });
     }
     if (activeFilters.space.length) activeFilters.space.forEach(v => chips.push({ label: `Space: ${v}`, key: 'space', value: v }));
     if (activeFilters.shape.length) activeFilters.shape.forEach(v => chips.push({ label: `Shape: ${v}`, key: 'shape', value: v }));
     if (activeFilters.size.length) activeFilters.size.forEach(v => chips.push({ label: `Size: ${v}`, key: 'size', value: v }));
+    if (activeFilters.material.length) activeFilters.material.forEach(v => chips.push({ label: `Material: ${v}`, key: 'material', value: v }));
 
     if (chips.length === 0) return;
 
     container.innerHTML = chips.map(c => `
         <div class="flex items-center gap-2 bg-heritage-dark text-white text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-full font-bold">
             ${c.label}
-            <button onclick="clearSingleFilter('${c.key}', '${c.value || ''}')" class="hover:text-heritage-gold transition-colors ml-1">✕</button>
+            <button onclick="clearSingleFilter('${c.key}', '${c.value || ''}')" class="hover:text-heritage-gold transition-colors ml-1">âœ•</button>
         </div>
     `).join('') + `<button onclick="clearAllFilters()" class="text-[9px] uppercase tracking-widest font-bold text-heritage-rust hover:underline ml-2">Clear All</button>`;
 }
 
+function filterContainerId(key) {
+    return key === 'material' ? 'filter-materials' : `filter-${key}`;
+}
+
 function clearSingleFilter(key, value) {
-    if (['space', 'shape', 'size'].includes(key)) {
+    if (['space', 'shape', 'size', 'material'].includes(key)) {
         activeFilters[key] = activeFilters[key].filter(v => v !== value);
         // Uncheck in UI
-        document.querySelectorAll(`#filter-${key} input`).forEach(i => {
+        document.querySelectorAll(`#${filterContainerId(key)} input`).forEach(i => {
             if (i.value === value) i.checked = false;
         });
     } else {
@@ -999,16 +1071,16 @@ function clearFilter(key) {
         if (minEl) minEl.value = 0;
         if (maxEl) maxEl.value = 100000;
         handlePriceSlider();
-    } else if (['space', 'shape', 'size'].includes(key)) {
+    } else if (['space', 'shape', 'size', 'material'].includes(key)) {
         activeFilters[key] = [];
-        document.querySelectorAll(`#filter-${key} input`).forEach(i => i.checked = false);
+        document.querySelectorAll(`#${filterContainerId(key)} input`).forEach(i => i.checked = false);
     } else {
         activeFilters[key] = null;
     }
     applyFilters();
 }
 
-function handlePriceSlider() {
+function handlePriceSlider(trigger) {
     const minInput = document.getElementById('price-min');
     const maxInput = document.getElementById('price-max');
     const track = document.getElementById('slider-track');
@@ -1021,7 +1093,8 @@ function handlePriceSlider() {
     let max = parseInt(maxInput.value);
 
     if (max - min < 5000) {
-        if (event?.target?.classList.contains('min-range')) {
+        const target = trigger || (typeof event !== 'undefined' ? event.target : null);
+        if (target?.classList?.contains('min-range')) {
             minInput.value = max - 5000;
             min = max - 5000;
         } else {
@@ -1039,8 +1112,8 @@ function handlePriceSlider() {
     minVal.style.left = minPct + "%";
     maxVal.style.left = maxPct + "%";
 
-    minVal.innerText = `₹${(min/1000).toFixed(0)}k`;
-    maxVal.innerText = max >= 100000 ? `₹1L+` : `₹${(max/1000).toFixed(0)}k`;
+    minVal.innerText = `â‚¹${(min/1000).toFixed(0)}k`;
+    maxVal.innerText = max >= 100000 ? `â‚¹1L+` : `â‚¹${(max/1000).toFixed(0)}k`;
 
     activeFilters.price_min = min;
     activeFilters.price_max = max;
@@ -1059,6 +1132,7 @@ function clearAllFilters() {
         space: [],
         shape: [],
         size: [],
+        material: [],
         price_min: 0,
         price_max: 100000,
         search: null,
@@ -1100,14 +1174,16 @@ function populateSidebarFilters(products) {
         }).join('');
     };
 
-    populate(matContainer, 'material');
+    populate(matContainer, 'material', activeFilters.material);
     populate(spaceContainer, 'space', activeFilters.space);
     populate(shapeContainer, 'shape', activeFilters.shape);
     populate(sizeContainer, 'size', activeFilters.size);
 
     if (catContainer && catContainer.children.length === 0) {
         fetch(`${API_BASE_URL}/categories/`).then(res => res.json()).then(data => {
-            const cats = data.results ?? data;
+            const cats = (data.results ?? data);
+            return cats.length ? cats : FALLBACK_CATEGORIES;
+        }).catch(() => FALLBACK_CATEGORIES).then(cats => {
             catContainer.innerHTML = cats.map(c => `
                 <label class="filter-option">
                     <input type="radio" name="cat" value="${c.slug}" ${activeFilters.category_slug === c.slug ? 'checked' : ''} onchange="activeFilters.category_slug='${c.slug}';applyFilters()">
@@ -1120,16 +1196,15 @@ function populateSidebarFilters(products) {
 }
 
 
-// ── Product Detail Logic ──────────────────────
+// â”€â”€ Product Detail Logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 async function fetchProductDetail(slug) {
     const container = document.getElementById('product-content');
     container.innerHTML = '<div class="text-center py-40"><span class="animate-pulse font-serif text-2xl">Curating Masterpiece...</span></div>';
     
     try {
-        const res = await fetch(`${API_BASE_URL}/products/?slug=${slug}`);
-        const data = await res.json();
-        const product = data.results ? data.results[0] : data[0];
+        const { products } = await fetchCatalogProducts(`${API_BASE_URL}/products/?slug=${slug}`, { allowEmpty: true });
+        const product = products[0] || FALLBACK_PRODUCTS.find(p => p.slug === slug);
         
         if (!product) {
             container.innerHTML = '<div class="text-center py-40">Piece not found.</div>';
@@ -1140,7 +1215,7 @@ async function fetchProductDetail(slug) {
         updateSEO(product.title, product.description.substring(0, 160));
         renderBreadcrumbs('product-breadcrumbs', [
             { label: 'Collection', path: '/all' },
-            { label: product.category_name, path: `/category/${product.category_slug}` },
+            { label: product.category_name, path: `/category/${product.category_slug || slugifyText(product.category_name)}` },
             { label: product.title }
         ]);
 
@@ -1262,8 +1337,9 @@ async function fetchProductDetail(slug) {
         `;
         
         // Fetch Related
-        fetch(`${API_BASE_URL}/products/?category=${product.category}&limit=5`).then(r => r.json()).then(d => {
-            renderProducts((d.results ?? d).filter(p => p.id !== product.id).slice(0,4), document.getElementById('related-products'));
+        fetchCatalogProducts(`${API_BASE_URL}/products/?category=${product.category}&page_size=5`).then(({ products }) => {
+            const related = products.filter(p => p.id !== product.id).slice(0,4);
+            renderProducts(related.length ? related : FALLBACK_PRODUCTS.filter(p => p.id !== product.id && p.category_slug === product.category_slug).slice(0,4), document.getElementById('related-products'));
         });
 
     } catch (e) { console.error(e); }
@@ -1281,7 +1357,9 @@ function selectVariant(btn, price, discountPrice, size) {
     document.getElementById('pdp-price').innerText = formatPrice(discountPrice || price);
 }
 
-// ── Rendering Helpers ─────────────────────────
+// â”€â”€ Rendering Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+const PRODUCT_FALLBACK_IMG = '/static/images/hero-1-bc2ca9.png';
 
 function renderProducts(products, container) {
     if (!products || !products.length) {
@@ -1291,11 +1369,14 @@ function renderProducts(products, container) {
 
     container.innerHTML = products.map((p, i) => {
         const discountPct = p.discount_price ? Math.round((1 - (p.discount_price / p.price)) * 100) : 0;
+        const imgSrc = p.main_image || PRODUCT_FALLBACK_IMG;
         return `
             <div class="group relative product-card animate-fade-up" style="animation-delay:${i*0.05}s"
                  onclick="navigateTo(event, '/product/${p.slug}')">
                 <div class="relative aspect-[4/5] overflow-hidden bg-heritage-beige mb-6 rounded-sm">
-                    <img src="${p.main_image}" alt="${p.title}" loading="lazy" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                    <img src="${imgSrc}" alt="${p.title}" loading="lazy"
+                         onerror="this.onerror=null;this.src='${PRODUCT_FALLBACK_IMG}';"
+                         class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
                     <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <span class="bg-white/90 text-heritage-dark text-[9px] uppercase tracking-[2px] px-6 py-3 font-bold shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform">Quick View</span>
                     </div>
@@ -1314,7 +1395,7 @@ function renderProducts(products, container) {
     }).join('');
 }
 
-// ── Search & Infrastructure ───────────────────
+// â”€â”€ Search & Infrastructure â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function debounce(func, wait) {
     let timeout;
@@ -1350,7 +1431,8 @@ async function fetchCategories() {
     try {
         const res = await fetch(`${API_BASE_URL}/categories/`);
         const data = await res.json();
-        const items = data.results ?? data;
+        const apiItems = data.results ?? data;
+        const items = apiItems.length ? apiItems : FALLBACK_CATEGORIES;
         container.innerHTML = items.slice(0,4).map((cat, i) => `
             <div class="group product-card fade-up cursor-pointer" onclick="navigateTo(event, '/category/${cat.slug}')">
                 <div class="img-wrapper overflow-hidden rounded-sm">
@@ -1362,7 +1444,19 @@ async function fetchCategories() {
                 </div>
             </div>
         `).join('');
-    } catch(e) { console.error(e); }
+    } catch(e) {
+        container.innerHTML = FALLBACK_CATEGORIES.slice(0,4).map(cat => `
+            <div class="group product-card fade-up cursor-pointer" onclick="navigateTo(event, '/category/${cat.slug}')">
+                <div class="img-wrapper overflow-hidden rounded-sm">
+                    <img src="${cat.image_url}" class="transition-transform duration-1000 group-hover:scale-110">
+                </div>
+                <div class="text-center mt-6">
+                    <span class="product-label">Collection</span>
+                    <h3 class="nav-link-underline inline-block">${cat.name}</h3>
+                </div>
+            </div>
+        `).join('');
+    }
 }
 
 async function fetchFeaturedProducts() {
@@ -1378,18 +1472,16 @@ async function fetchFeaturedProducts() {
         </div>
     `).join('');
     try {
-        // Always fetch all products — show up to 8 on homepage
-        const res = await fetch(`${API_BASE_URL}/products/?ordering=-created_at&page_size=100`);
-        if (!res.ok) throw new Error(`API ${res.status}`);
-        const data = await res.json();
-        const allProducts = data.results ?? data;
-        // Prefer featured ones, fall back to all
-        const featured = allProducts.filter(p => p.is_featured);
-        const toShow = featured.length >= 4 ? featured : allProducts;
-        renderProducts(toShow.slice(0, 8), container);
+        // Fetch featured products first; if fewer than 4, fall back to newest
+        let { products: featured } = await fetchCatalogProducts(`${API_BASE_URL}/products/?is_featured=true&ordering=-created_at&page_size=8`);
+        if (featured.length < 4) {
+            const { products: newest } = await fetchCatalogProducts(`${API_BASE_URL}/products/?ordering=-created_at&page_size=8`);
+            featured = newest;
+        }
+        renderProducts(featured.slice(0, 8), container);
     } catch(e) {
         console.error('Featured products error:', e);
-        container.innerHTML = '<p class="col-span-full text-center opacity-40 py-10">Unable to load products.</p>';
+        renderProducts(FALLBACK_PRODUCTS.filter(p => p.is_featured).slice(0, 8), container);
     }
 }
 
@@ -1444,7 +1536,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
 });
 
-// ── Profile Icon Smart Routing ────────────────
+// â”€â”€ Profile Icon Smart Routing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function handleProfileClick(e) {
     if (e) e.preventDefault();
     const user = JSON.parse(localStorage.getItem('Kalakroti_user') || 'null');
@@ -1455,7 +1547,7 @@ function handleProfileClick(e) {
     }
 }
 
-// ── Google Sign In Logic ──────────────────────
+// â”€â”€ Google Sign In Logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function initGoogleSignIn() {
     const config = await loadPublicConfig();
     const clientId = config.google_client_id;
@@ -1553,7 +1645,7 @@ function updateAuthUI() {
         renderAccountView();
     }
 }
-// ── Festive Popup Helpers ─────────────────────
+// â”€â”€ Festive Popup Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function closeFestivePopup() {
     const popup = document.getElementById('festive-popup');
     const content = document.getElementById('festive-popup-content');
