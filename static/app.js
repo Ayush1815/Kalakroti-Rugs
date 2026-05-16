@@ -140,16 +140,16 @@ function handleRoute() {
     } else if (path.startsWith('/style/')) {
         const style = path.split('/').pop();
         showView('view-results');
-        updateResultsHeader(style, 'Style');
+        updateResultsHeader(style.charAt(0).toUpperCase() + style.slice(1), 'Style');
         renderBreadcrumbs('results-breadcrumbs', [{ label: 'Styles', path: '/all' }, { label: style }]);
         activeFilters.style = style;
         fetchResults();
     } else if (path.startsWith('/room/')) {
-        const room = path.split('/').pop();
+        const room = decodeURIComponent(path.split('/').pop());
         showView('view-results');
         updateResultsHeader(room.replace(/-/g, ' '), 'Room');
         renderBreadcrumbs('results-breadcrumbs', [{ label: 'Rooms', path: '/all' }, { label: room.replace(/-/g, ' ') }]);
-        activeFilters.room = room;
+        activeFilters.space = [room];
         fetchResults();
     } else if (path.startsWith('/product/')) {
         const slug = path.split('/').pop();
@@ -277,72 +277,18 @@ function closeAllSidebars() {
     document.body.style.overflow = '';
 }
 
-// ── Draggable FAB ─────────────────────────────
-
+// ── Help FAB (Fixed Bottom Right - CSS handles position) ──
 function initFAB() {
+    // FAB is now fixed via CSS (bottom: 32px; right: 32px)
+    // No drag needed — clean, always accessible
     const fab = document.getElementById('help-fab');
     if (!fab) return;
-
-    let isDragging = false;
-    let currentX = 0;
-    let currentY = 0;
-    let initialX;
-    let initialY;
-    let xOffset = 0;
-    let yOffset = 0;
-
-    fab.addEventListener("mousedown", dragStart);
-    document.addEventListener("mousemove", drag);
-    document.addEventListener("mouseup", dragEnd);
-
-    fab.addEventListener("touchstart", dragStart);
-    document.addEventListener("touchmove", drag);
-    document.addEventListener("touchend", dragEnd);
-
-    function dragStart(e) {
-        if (e.type === "touchstart") {
-            initialX = e.touches[0].clientX - xOffset;
-            initialY = e.touches[0].clientY - yOffset;
-        } else {
-            initialX = e.clientX - xOffset;
-            initialY = e.clientY - yOffset;
-        }
-        if (e.target === fab || fab.contains(e.target)) isDragging = true;
-    }
-
-    function drag(e) {
-        if (isDragging) {
-            e.preventDefault();
-            fab.style.transition = "none";
-            if (e.type === "touchmove") {
-                currentX = e.touches[0].clientX - initialX;
-                currentY = e.touches[0].clientY - initialY;
-            } else {
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-            }
-            xOffset = currentX;
-            yOffset = currentY;
-            fab.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-        }
-    }
-
-    function dragEnd() {
-        if (!isDragging) return;
-        isDragging = false;
-        fab.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-        
-        // Snap to nearest side
-        const width = window.innerWidth;
-        const rect = fab.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        
-        if (centerX < width / 2) {
-            xOffset = -(width - rect.width - 40); // Snap Left
-        } else {
-            xOffset = 0; // Snap Right
-        }
-        fab.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0)`;
+    // Pulse animation on first visit
+    if (!localStorage.getItem('fab_seen')) {
+        setTimeout(() => {
+            fab.style.animation = 'fab-pulse 1s ease 3';
+            localStorage.setItem('fab_seen', '1');
+        }, 3000);
     }
 }
 
@@ -942,7 +888,9 @@ async function fetchResults() {
     if (activeFilters.search) url += `&search=${encodeURIComponent(activeFilters.search)}`;
     if (activeFilters.price_min > 0) url += `&price__gte=${activeFilters.price_min}`;
     if (activeFilters.price_max < 100000) url += `&price__lte=${activeFilters.price_max}`;
-    if (activeFilters.room) url += `&tags__name=${encodeURIComponent(activeFilters.room)}`;
+    // room maps to space__icontains
+    if (activeFilters.room) url += `&space__icontains=${encodeURIComponent(activeFilters.room)}`;
+    // style maps to tags__name
     if (activeFilters.style) url += `&tags__name=${encodeURIComponent(activeFilters.style)}`;
     if (activeFilters.category_slug) url += `&category__slug=${activeFilters.category_slug}`;
     
@@ -953,13 +901,17 @@ async function fetchResults() {
 
     try {
         const res = await fetch(url);
+        if (!res.ok) throw new Error(`API ${res.status}`);
         const data = await res.json();
         const products = data.results ?? data;
         renderProducts(products, grid);
         const countEl = document.getElementById('results-count');
-        if (countEl) countEl.innerText = `Showing ${products.length} products`;
+        if (countEl) countEl.innerText = `Showing ${products.length} product${products.length !== 1 ? 's' : ''}`;
         populateSidebarFilters(products);
-    } catch (e) { console.error(e); }
+    } catch (e) {
+        console.error('fetchResults error:', e);
+        grid.innerHTML = '<div class="col-span-3 text-center py-20 text-heritage-dark/40">Unable to load products. Please try again.</div>';
+    }
 }
 
 function applyFilters() {
@@ -1426,28 +1378,18 @@ async function fetchFeaturedProducts() {
         </div>
     `).join('');
     try {
-        const res = await fetch(`${API_BASE_URL}/products/?is_featured=true&page_size=50`);
+        // Always fetch all products — show up to 8 on homepage
+        const res = await fetch(`${API_BASE_URL}/products/?ordering=-created_at&page_size=100`);
         if (!res.ok) throw new Error(`API ${res.status}`);
         const data = await res.json();
-        const products = data.results ?? data;
-        if (products.length === 0) {
-            // Fallback: fetch any products if featured filter returns nothing
-            const fallback = await fetch(`${API_BASE_URL}/products/?page_size=50`);
-            const fd = await fallback.json();
-            renderProducts(fd.results ?? fd, container);
-        } else {
-            renderProducts(products, container);
-        }
+        const allProducts = data.results ?? data;
+        // Prefer featured ones, fall back to all
+        const featured = allProducts.filter(p => p.is_featured);
+        const toShow = featured.length >= 4 ? featured : allProducts;
+        renderProducts(toShow.slice(0, 8), container);
     } catch(e) {
         console.error('Featured products error:', e);
-        // Graceful fallback — fetch any products
-        try {
-            const fallback = await fetch(`${API_BASE_URL}/products/?page_size=50`);
-            const fd = await fallback.json();
-            renderProducts(fd.results ?? fd, container);
-        } catch(e2) {
-            container.innerHTML = '<p class="col-span-full text-center opacity-40 py-10">Unable to load products.</p>';
-        }
+        container.innerHTML = '<p class="col-span-full text-center opacity-40 py-10">Unable to load products.</p>';
     }
 }
 

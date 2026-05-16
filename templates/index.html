@@ -176,14 +176,6 @@
                         <img src="/static/images/silk-carpets-e7427e.jpg" class="w-full h-full object-cover shrink-0">
                         <img src="/static/images/hero-4-8cbbc2.png" class="w-full h-full object-cover shrink-0">
                     </div>
-                    <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mt-12 opacity-40">
-                        <div class="aspect-square bg-heritage-beige">
-                            <img src="/static/images/hero-3-26995d.jpg" class="w-full h-full object-cover">
-                        </div>
-                        <div class="aspect-square bg-heritage-beige">
-                            <img src="/static/images/hero-4-8cbbc2.png" class="w-full h-full object-cover">
-                        </div>
-                    </div>
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-heritage-cream via-heritage-cream/10 to-transparent z-[2]">
                     </div>
@@ -273,6 +265,18 @@
                     <a href="#contact"
                         class="inline-block px-14 py-5 border border-white/30 text-white text-[10px] uppercase tracking-[4px] font-bold transition-all hover:bg-white hover:text-heritage-dark hover:border-white">Start
                         Customizing</a>
+                </div>
+            </section>
+
+            <!-- Heritage Image Duo: shown after Design Your Rug -->
+            <section class="grid grid-cols-2 h-[60vh]">
+                <div class="overflow-hidden relative group">
+                    <img src="/static/images/hero-1-bc2ca9.png" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-105">
+                    <div class="absolute inset-0 bg-heritage-dark/20 group-hover:bg-heritage-dark/10 transition-all"></div>
+                </div>
+                <div class="overflow-hidden relative group">
+                    <img src="/static/images/silk-carpets-e7427e.jpg" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-105">
+                    <div class="absolute inset-0 bg-heritage-dark/20 group-hover:bg-heritage-dark/10 transition-all"></div>
                 </div>
             </section>
         </div>
@@ -747,14 +751,15 @@
             payment signature with the treasury...</p>
     </div>
 
-    <!-- Floating Help FAB -->
-    <div id="help-fab" draggable="true" onclick="navigateTo(event, '/contact')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+    <!-- Floating Help FAB - Fixed Bottom Right -->
+    <div id="help-fab" onclick="navigateTo(event, '/contact')" title="Need Help?">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
             <path d="M12 17h.01" />
         </svg>
+        <span style="font-size:9px;letter-spacing:1px;font-weight:700;text-transform:uppercase;display:block;margin-top:2px;">Help</span>
     </div>
 
     <!-- Product Modal -->
