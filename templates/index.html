@@ -176,6 +176,14 @@
                         <img src="/static/images/silk-carpets-e7427e.jpg" class="w-full h-full object-cover shrink-0">
                         <img src="/static/images/hero-4-8cbbc2.png" class="w-full h-full object-cover shrink-0">
                     </div>
+                    <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mt-12 opacity-40">
+                        <div class="aspect-square bg-heritage-beige">
+                            <img src="/static/images/hero-3-26995d.jpg" class="w-full h-full object-cover">
+                        </div>
+                        <div class="aspect-square bg-heritage-beige">
+                            <img src="/static/images/hero-4-8cbbc2.png" class="w-full h-full object-cover">
+                        </div>
+                    </div>
                     <div
                         class="absolute inset-0 bg-gradient-to-r from-heritage-cream via-heritage-cream/10 to-transparent z-[2]">
                     </div>
@@ -216,9 +224,8 @@
                     </div>
                 </div>
 
-                <div id="tab-content"
-                    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-16 animate-fade-up">
-                    <!-- Dynamically populated room/style cards -->
+                <div id="tab-content" class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                    <!-- Injected via switchShopTab() -->
                 </div>
 
                 <div class="text-center mt-10">
@@ -238,7 +245,10 @@
                     <a href="/all" onclick="navigateTo(event, '/all')" class="btn btn-outline"
                         style="font-size: 0.65rem;">View All →</a>
                 </div>
-                <div class="grid-4" id="featured-products-container"></div>
+                <!-- Top Picks Grid -->
+                <div id="featured-products-container" class="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+                    <!-- Products will be injected here by fetchFeaturedProducts() -->
+                </div>
             </section>
 
             <section id="custom" class="bg-heritage-dark relative overflow-hidden min-h-[600px] flex items-center">

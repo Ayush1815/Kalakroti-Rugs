@@ -127,7 +127,7 @@ function handleRoute() {
         requestAnimationFrame(() => initHome());
     } else if (path.startsWith('/all')) {
         showView('view-results');
-        updateResultsHeader('The Collection', 'Curated');
+        updateResultsHeader('Our', 'Curated');
         renderBreadcrumbs('results-breadcrumbs', [{ label: 'All Rugs' }]);
         fetchResults();
     } else if (path.startsWith('/category/')) {
