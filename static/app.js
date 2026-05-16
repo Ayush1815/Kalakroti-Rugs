@@ -870,11 +870,11 @@ function initHome() {
 
 const shopTabData = {
     room: [
-        { name: "Living Room", img: "room-living-451e10.jpg", slug: "living-room" },
-        { name: "Bedroom", img: "room-bedroom-fe556f.jpg", slug: "bedroom" },
-        { name: "Dining Room", img: "room-dining-43bfaf.jpg", slug: "dining-room" },
+        { name: "Living Room", img: "cat-living.png", slug: "living-room" },
+        { name: "Bedroom", img: "cat-bedroom.png", slug: "bedroom" },
+        { name: "Dining Room", img: "cat-dining.png", slug: "dining-room" },
         { name: "Hallway", img: "room-hallway-784984.jpg", slug: "hallway" },
-        { name: "Office", img: "room-office-641f27.jpg", slug: "office" }
+        { name: "Office", img: "cat-office.png", slug: "office" }
     ],
     style: [
         { name: "Modern", img: "hero-3-26995d.jpg", slug: "modern" },
@@ -1498,6 +1498,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 content.classList.remove('scale-95');
                 content.classList.add('scale-100');
             }
+            startFestiveTimer();
         }
     }, 5000);
 });
@@ -1631,6 +1632,40 @@ function handleFestiveSubscribe(e) {
     const email = e.target.email.value;
     showToast(`Voucher Sent! Check ${email} for your 15% discount code.`);
     closeFestivePopup();
+}
+
+function startFestiveTimer() {
+    let targetTime = localStorage.getItem('festive_target_time');
+    if (!targetTime) {
+        // Set target to 24 hours from now
+        targetTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+        localStorage.setItem('festive_target_time', targetTime);
+    } else {
+        targetTime = parseInt(targetTime);
+    }
+
+    const update = () => {
+        const now = new Date().getTime();
+        const diff = targetTime - now;
+
+        if (diff <= 0) {
+            document.getElementById('timer-hours').innerText = '00';
+            document.getElementById('timer-mins').innerText = '00';
+            document.getElementById('timer-secs').innerText = '00';
+            return;
+        }
+
+        const h = Math.floor(diff / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('timer-hours').innerText = h.toString().padStart(2, '0');
+        document.getElementById('timer-mins').innerText = m.toString().padStart(2, '0');
+        document.getElementById('timer-secs').innerText = s.toString().padStart(2, '0');
+    };
+
+    update();
+    setInterval(update, 1000);
 }
 
 window.handlePriceSlider = handlePriceSlider;
