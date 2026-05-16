@@ -939,7 +939,7 @@ async function fetchResults() {
         grid.innerHTML = '<div class="col-span-3 text-center py-20"><span class="animate-pulse">Curating your collection...</span></div>';
     }
     
-    let url = `${API_BASE_URL}/products/?ordering=${activeFilters.sort}`;
+    let url = `${API_BASE_URL}/products/?ordering=${activeFilters.sort}&page_size=100`;
     if (activeFilters.search) url += `&search=${encodeURIComponent(activeFilters.search)}`;
     if (activeFilters.price_min > 0) url += `&price__gte=${activeFilters.price_min}`;
     if (activeFilters.price_max < 100000) url += `&price__lte=${activeFilters.price_max}`;
@@ -1427,13 +1427,13 @@ async function fetchFeaturedProducts() {
         </div>
     `).join('');
     try {
-        const res = await fetch(`${API_BASE_URL}/products/?is_featured=true&page_size=8`);
+        const res = await fetch(`${API_BASE_URL}/products/?is_featured=true&page_size=50`);
         if (!res.ok) throw new Error(`API ${res.status}`);
         const data = await res.json();
         const products = data.results ?? data;
         if (products.length === 0) {
             // Fallback: fetch any products if featured filter returns nothing
-            const fallback = await fetch(`${API_BASE_URL}/products/?page_size=8`);
+            const fallback = await fetch(`${API_BASE_URL}/products/?page_size=50`);
             const fd = await fallback.json();
             renderProducts(fd.results ?? fd, container);
         } else {
@@ -1443,7 +1443,7 @@ async function fetchFeaturedProducts() {
         console.error('Featured products error:', e);
         // Graceful fallback — fetch any products
         try {
-            const fallback = await fetch(`${API_BASE_URL}/products/?page_size=8`);
+            const fallback = await fetch(`${API_BASE_URL}/products/?page_size=50`);
             const fd = await fallback.json();
             renderProducts(fd.results ?? fd, container);
         } catch(e2) {
