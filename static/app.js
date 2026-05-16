@@ -870,11 +870,11 @@ function initHome() {
 
 const shopTabData = {
     room: [
-        { name: "Living Room", img: "cat-living.png", slug: "living-room" },
-        { name: "Bedroom", img: "cat-bedroom.png", slug: "bedroom" },
-        { name: "Dining Room", img: "cat-dining.png", slug: "dining-room" },
-        { name: "Hallway", img: "room-hallway-784984.jpg", slug: "hallway" },
-        { name: "Office", img: "cat-office.png", slug: "office" }
+        { name: "Living Room", img: "cat-living.png", slug: "Living Room" },
+        { name: "Bedroom", img: "cat-bedroom.png", slug: "Bedroom" },
+        { name: "Dining Room", img: "cat-dining.png", slug: "Dining Room" },
+        { name: "Hallway", img: "room-hallway-784984.jpg", slug: "Hallway" },
+        { name: "Office", img: "cat-office.png", slug: "Office" }
     ],
     style: [
         { name: "Modern", img: "hero-3-26995d.jpg", slug: "modern" },

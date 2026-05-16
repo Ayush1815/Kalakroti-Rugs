@@ -3,8 +3,9 @@
 .klk-loader-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(247, 244, 238, 0.95); /* Heritage cream */
-    backdrop-filter: blur(8px);
+    /* Luxury Vignette: Dark center fading to even darker edges with 40% tint */
+    background: radial-gradient(circle, rgba(31, 27, 24, 0.4) 0%, rgba(15, 13, 12, 0.7) 100%);
+    backdrop-filter: blur(12px);
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -12,7 +13,7 @@
     justify-content: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .klk-loader-overlay.klk-active {
     opacity: 1;
@@ -21,117 +22,61 @@
 
 .klk-loader-container {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 300px; /* Bigger container */
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Carpet */
+/* Rug Roll Animation */
 .klk-carpet-wrapper {
-    position: absolute;
-    width: 120px;
-    height: 40px;
-    z-index: 1;
-    animation: klk-carpet-loop 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    transform-origin: center center;
+    width: 250px;
+    height: 100px;
 }
 
 .klk-carpet-svg {
     width: 100%;
     height: 100%;
-    fill: #1f1b18;
+    fill: #C5A059; /* Heritage Gold */
 }
 
-/* Text */
+.klk-rug-tail {
+    animation: klk-unroll-tail 2.5s ease-in-out infinite;
+}
+
+.klk-rug-roll {
+    animation: klk-unroll-roll 2.5s ease-in-out infinite;
+}
+
+/* Text Styling */
 .klk-loader-text-container {
-    margin-top: 1rem;
-    height: 30px;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
+    margin-top: 2.5rem;
+    height: 40px;
+    text-align: center;
 }
 
 .klk-loader-text {
     font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: #1f1b18;
-    letter-spacing: 2px;
+    font-size: 1.4rem;
+    color: #f7f4ee; /* Cream text on dark background */
+    letter-spacing: 4px;
     text-transform: uppercase;
     font-style: italic;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    white-space: nowrap;
-}
-.klk-loader-text.klk-active {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* Variants */
-.klk-inline-loader {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-}
-.klk-inline-loader .klk-loader-container {
-    width: 60px;
-    height: 60px;
-}
-.klk-inline-loader .klk-carpet-wrapper {
-    width: 40px;
-    height: 14px;
-}
-.klk-inline-loader .klk-loader-text-container {
-    margin-top: 0;
-    width: auto;
-}
-
-/* Button Variant */
-.klk-btn-loading {
-    position: relative;
-    color: transparent !important;
-    pointer-events: none;
-}
-.klk-btn-loader-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.klk-btn-loader-wrapper .klk-loader-container {
-    width: 40px;
-    height: 40px;
-}
-.klk-btn-loader-wrapper .klk-carpet-wrapper {
-    width: 28px;
-    height: 10px;
-}
-.klk-btn-loader-wrapper .klk-carpet-svg {
-    fill: #ffffff; /* White for buttons */
-}
-.btn-outline .klk-btn-loader-wrapper .klk-carpet-svg {
-    fill: #1f1b18; /* Dark for outline buttons */
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 /* Keyframes */
+@keyframes klk-unroll-tail {
+    0%, 10% { width: 0; opacity: 0; }
+    50% { width: 180px; opacity: 1; }
+    90%, 100% { width: 0; opacity: 0; }
+}
 
-@keyframes klk-carpet-loop {
-    0% { transform: perspective(600px) translateY(0px) rotateY(0deg) rotateZ(0deg); }
-    30% { transform: perspective(600px) translateY(0px) rotateY(360deg) rotateZ(0deg); } /* 360 flat spin */
-    50% { transform: perspective(600px) translateY(-12px) rotateY(360deg) rotateZ(3deg); } /* Wavy up */
-    70% { transform: perspective(600px) translateY(8px) rotateY(360deg) rotateZ(-2deg); } /* Wavy down */
-    85% { transform: perspective(600px) translateY(-4px) rotateY(360deg) rotateZ(1deg); } /* Wavy up slightly */
-    100% { transform: perspective(600px) translateY(0px) rotateY(360deg) rotateZ(0deg); } /* Settle */
+@keyframes klk-unroll-roll {
+    0%, 10% { transform: translateX(0) rotate(0deg); }
+    50% { transform: translateX(170px) rotate(360deg); }
+    90%, 100% { transform: translateX(0) rotate(0deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,7 +3,7 @@
  * A premium, hardware-accelerated cinematic loading experience.
  */
 
-const KalakrotiLoader = (function() {
+const KalakrotiLoader = (function () {
     // --- SVG Assets ---
     // Minimalist, elegant silhouette paths
     const SVG_CHARACTER = `
@@ -46,7 +46,7 @@ const KalakrotiLoader = (function() {
     function createLoaderDOM(isInline = false) {
         const container = document.createElement('div');
         container.className = 'klk-loader-container';
-        
+
         container.innerHTML = `
             <div class="klk-carpet-wrapper">
                 ${SVG_CARPET}
@@ -57,37 +57,37 @@ const KalakrotiLoader = (function() {
 
     function initOverlay() {
         if (overlayEl) return;
-        
+
         overlayEl = document.createElement('div');
         overlayEl.className = 'klk-loader-overlay';
         overlayEl.setAttribute('role', 'alert');
         overlayEl.setAttribute('aria-busy', 'true');
 
         const container = createLoaderDOM();
-        
+
         const textContainer = document.createElement('div');
         textContainer.className = 'klk-loader-text-container';
-        
+
         const textEl = document.createElement('div');
         textEl.className = 'klk-loader-text klk-active';
         textEl.id = 'klk-global-text';
-        
+
         textContainer.appendChild(textEl);
         overlayEl.appendChild(container);
         overlayEl.appendChild(textContainer);
-        
+
         document.body.appendChild(overlayEl);
     }
 
     // --- Text Cycling ---
     function cycleText() {
         if (!currentTexts || currentTexts.length <= 1) return;
-        
+
         const textEl = document.getElementById('klk-global-text');
         if (!textEl) return;
 
         textEl.classList.remove('klk-active');
-        
+
         setTimeout(() => {
             textIndex = (textIndex + 1) % currentTexts.length;
             textEl.textContent = currentTexts[textIndex];
@@ -101,12 +101,12 @@ const KalakrotiLoader = (function() {
          * Show the cinematic fullscreen loader
          * @param {Array<string>|string} phrases - Text or array of texts to cycle
          */
-        showFullscreen: function(phrases = DEFAULT_PHRASES) {
+        showFullscreen: function (phrases = DEFAULT_PHRASES) {
             initOverlay();
-            
+
             currentTexts = Array.isArray(phrases) ? phrases : [phrases];
             textIndex = 0;
-            
+
             const textEl = document.getElementById('klk-global-text');
             textEl.textContent = currentTexts[0];
             textEl.classList.add('klk-active');
@@ -125,11 +125,11 @@ const KalakrotiLoader = (function() {
         /**
          * Hide the fullscreen loader
          */
-        hideFullscreen: function() {
+        hideFullscreen: function () {
             if (!overlayEl) return;
             overlayEl.classList.remove('klk-active');
             document.body.style.overflow = '';
-            
+
             if (textInterval) {
                 clearInterval(textInterval);
                 textInterval = null;
@@ -141,9 +141,9 @@ const KalakrotiLoader = (function() {
          * @param {HTMLElement} targetEl - The container to inject into
          * @param {string} text - Optional text to display next to the loader
          */
-        injectInline: function(targetEl, text = "Loading...") {
+        injectInline: function (targetEl, text = "Loading...") {
             if (!targetEl) return;
-            
+
             const wrapper = document.createElement('div');
             wrapper.className = 'klk-inline-loader';
             wrapper.innerHTML = `
@@ -152,7 +152,7 @@ const KalakrotiLoader = (function() {
                     <div class="klk-loader-text klk-active" style="position:static; transform:none; opacity:1;">${text}</div>
                 </div>
             `;
-            
+
             targetEl.innerHTML = '';
             targetEl.appendChild(wrapper);
         },
@@ -161,21 +161,21 @@ const KalakrotiLoader = (function() {
          * Transform a button into a loading state
          * @param {HTMLButtonElement} btn - The button to transform
          */
-        startButtonLoad: function(btn) {
+        startButtonLoad: function (btn) {
             if (!btn || btn.hasAttribute('data-loading')) return;
-            
+
             const originalWidth = btn.offsetWidth;
             const originalText = btn.innerHTML;
-            
+
             btn.setAttribute('data-loading', 'true');
             btn.setAttribute('data-original-text', originalText);
             btn.style.width = originalWidth + 'px'; // Fix width to prevent jank
             btn.classList.add('klk-btn-loading');
-            
+
             const loaderWrapper = document.createElement('div');
             loaderWrapper.className = 'klk-btn-loader-wrapper';
             loaderWrapper.innerHTML = createLoaderDOM(true).outerHTML;
-            
+
             btn.appendChild(loaderWrapper);
             btn.disabled = true;
         },
@@ -184,9 +184,9 @@ const KalakrotiLoader = (function() {
          * Restore a button from loading state
          * @param {HTMLButtonElement} btn - The button to restore
          */
-        stopButtonLoad: function(btn) {
+        stopButtonLoad: function (btn) {
             if (!btn || !btn.hasAttribute('data-loading')) return;
-            
+
             btn.innerHTML = btn.getAttribute('data-original-text');
             btn.removeAttribute('data-loading');
             btn.removeAttribute('data-original-text');
