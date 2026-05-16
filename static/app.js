@@ -1611,6 +1611,28 @@ function updateAuthUI() {
         renderAccountView();
     }
 }
+// ── Festive Popup Helpers ─────────────────────
+function closeFestivePopup() {
+    const popup = document.getElementById('festive-popup');
+    const content = document.getElementById('festive-popup-content');
+    if (popup) {
+        popup.classList.add('opacity-0', 'pointer-events-none');
+        popup.classList.remove('opacity-100');
+        if (content) {
+            content.classList.add('scale-95');
+            content.classList.remove('scale-100');
+        }
+        localStorage.setItem('festive_popup_dismissed', 'true');
+    }
+}
+
+function handleFestiveSubscribe(e) {
+    e.preventDefault();
+    const email = e.target.email.value;
+    showToast(`Voucher Sent! Check ${email} for your 15% discount code.`);
+    closeFestivePopup();
+}
+
 window.handlePriceSlider = handlePriceSlider;
 window.clearSingleFilter = clearSingleFilter;
 window.clearAllFilters = clearAllFilters;
@@ -1625,26 +1647,4 @@ window.closeFestivePopup = closeFestivePopup;
 window.handleFestiveSubscribe = handleFestiveSubscribe;
 window.changePDPImage = changePDPImage;
 window.selectVariant = selectVariant;
-
-// ── Festive Popup Helpers ─────────────────────
-window.closeFestivePopup = () => {
-    const popup = document.getElementById('festive-popup');
-    const content = document.getElementById('festive-popup-content');
-    if (popup) {
-        popup.classList.add('opacity-0', 'pointer-events-none');
-        popup.classList.remove('opacity-100');
-        if (content) {
-            content.classList.add('scale-95');
-            content.classList.remove('scale-100');
-        }
-        localStorage.setItem('festive_popup_dismissed', 'true');
-    }
-};
-
-window.handleFestiveSubscribe = (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    showToast(`Voucher Sent! Check ${email} for your 15% discount code.`);
-    closeFestivePopup();
-};
 
