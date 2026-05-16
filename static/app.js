@@ -873,21 +873,20 @@ const shopTabData = {
         { name: "Living Room", img: "cat-living.png", slug: "Living Room" },
         { name: "Bedroom", img: "cat-bedroom.png", slug: "Bedroom" },
         { name: "Dining Room", img: "cat-dining.png", slug: "Dining Room" },
-        { name: "Hallway", img: "room-hallway-784984.jpg", slug: "Hallway" },
+        { name: "Hallway", img: "cat-hallway.png", slug: "Hallway" },
         { name: "Office", img: "cat-office.png", slug: "Office" }
     ],
     style: [
-        { name: "Modern", img: "hero-3-26995d.jpg", slug: "modern" },
-        { name: "Traditional", img: "hero-1-bc2ca9.png", slug: "traditional" },
-        { name: "Minimal", img: "hero-2-c8798d.png", slug: "minimal" },
-        { name: "Vintage", img: "hero-4-8cbbc2.png", slug: "vintage" },
-        { name: "Bohemian", img: "room-bedroom-fe556f.jpg", slug: "bohemian" }
+        { name: "Modern", img: "style-modern.png", slug: "modern" },
+        { name: "Vintage", img: "vintage-kilims-3112c8.jpg", slug: "vintage" },
+        { name: "Bohemian", img: "hero-4-8cbbc2.png", slug: "bohemian" },
+        { name: "Traditional", img: "cat-living.png", slug: "traditional" }
     ],
     material: [
-        { name: "Silk", img: "silk-carpets-e7427e.jpg", slug: "silk-carpets" },
-        { name: "Wool", img: "hero-1-bc2ca9.png", slug: "woolen-rugs" },
-        { name: "Jute", img: "room-living-451e10.jpg", slug: "jute-kilims" },
-        { name: "Bamboo Silk", img: "hero-2-c8798d.png", slug: "bamboo-silk" }
+        { name: "Wool", img: "woolen-rugs-28654e.jpg", slug: "wool" },
+        { name: "Bamboo Silk", img: "silk-carpets-e7427e.jpg", slug: "silk" },
+        { name: "Jute", img: "hero-1-bc2ca9.png", slug: "jute" },
+        { name: "Cotton", img: "cat-bedroom.png", slug: "cotton" }
     ]
 };
 
