@@ -11,8 +11,6 @@ python manage.py collectstatic --no-input
 # Run migrations
 python manage.py migrate
 
-# Optional production-safe sample catalog seed.
-# Set SEED_SAMPLE_DATA=True in Render only when the target database is empty.
-if [ "$SEED_SAMPLE_DATA" = "True" ]; then
-  python manage.py seed_catalog --if-empty
-fi
+# Run production-safe sample catalog seed.
+# Safe check inside seed_catalog --if-empty ensures it only seeds when the database is empty.
+python manage.py seed_catalog --if-empty

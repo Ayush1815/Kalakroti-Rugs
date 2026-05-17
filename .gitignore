@@ -21,3 +21,8 @@ Thumbs.db
 .uv-cache/
 staticfiles/
 node_modules/
+
+# Ignore local catalog media assets
+aura_backend/images/
+test.sqlite3
+

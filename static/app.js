@@ -1,4 +1,4 @@
-﻿// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Kalakroti Rugs â€“ Frontend Engine v4.0 (Shopping Suite)
 // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -31,16 +31,7 @@ const FALLBACK_CATEGORIES = [
     { id: 4, name: 'Modern Abstracts', slug: 'modern-abstracts', image_url: '/static/images/modern-abstracts-3813de.jpg', order: 4 }
 ];
 
-const FALLBACK_PRODUCTS = [
-    { id: 9001, category: 1, category_name: 'Silk Carpets', category_slug: 'silk-carpets', title: 'Sapphire Medallion Silk Carpet', slug: 'sapphire-medallion-silk-carpet', short_description: 'A luminous silk statement rug with a classical medallion field.', description: 'A luminous silk statement rug inspired by heirloom Persian medallions and finished for refined contemporary rooms.', price: 148000, discount_price: 118000, sku: 'KALA-SILK-001', stock_quantity: 4, main_image: '/static/images/silk-carpets-e7427e.jpg', hover_image: '/static/images/hero-3-26995d.jpg', size: '8x10 ft', shape: 'Rectangle', space: 'Living Room', material: 'Mulberry Silk', origin: 'Kashmir, India', pattern_style: 'Traditional', is_featured: true, is_new_arrival: true, is_best_seller: true, gallery: [], variants: [], reviews: [], tags: [{ name: 'Traditional' }, { name: 'Living Room' }] },
-    { id: 9002, category: 2, category_name: 'Woolen Rugs', category_slug: 'woolen-rugs', title: 'Amber Garden Hand-Knotted Wool Rug', slug: 'amber-garden-hand-knotted-wool-rug', short_description: 'Warm botanical wool craft for layered homes.', description: 'Hand-knotted wool brings a soft amber palette to a garden-inspired pattern suited to lounges, studies, and bedrooms.', price: 62000, discount_price: 49900, sku: 'KALA-WOOL-002', stock_quantity: 7, main_image: '/static/images/hero-1-bc2ca9.png', hover_image: '/static/images/woolen-rugs-28654e.jpg', size: '6x9 ft', shape: 'Rectangle', space: 'Bedroom', material: 'Highland Wool', origin: 'Jaipur, India', pattern_style: 'Floral', is_featured: true, is_new_arrival: true, is_best_seller: false, gallery: [], variants: [], reviews: [], tags: [{ name: 'Floral' }, { name: 'Bedroom' }] },
-    { id: 9003, category: 3, category_name: 'Vintage Kilims', category_slug: 'vintage-kilims', title: 'Rust Nomad Vintage Kilim', slug: 'rust-nomad-vintage-kilim', short_description: 'Flatwoven kilim with softened heritage tones.', description: 'A flatwoven vintage kilim with rust, ochre, and charcoal geometry for relaxed dining rooms and hallways.', price: 42000, discount_price: 34900, sku: 'KALA-KILIM-003', stock_quantity: 5, main_image: '/static/images/vintage-kilims-3112c8.jpg', hover_image: '/static/images/hero-4-8cbbc2.png', size: '5x8 ft', shape: 'Rectangle', space: 'Dining Room', material: 'Wool Cotton Blend', origin: 'Mirzapur, India', pattern_style: 'Geometric', is_featured: true, is_new_arrival: false, is_best_seller: true, gallery: [], variants: [], reviews: [], tags: [{ name: 'Geometric' }, { name: 'Dining Room' }] },
-    { id: 9004, category: 4, category_name: 'Modern Abstracts', category_slug: 'modern-abstracts', title: 'Ivory Abstract Studio Rug', slug: 'ivory-abstract-studio-rug', short_description: 'A quiet abstract rug for modern spaces.', description: 'A low-contrast abstract composition in ivory, smoke, and charcoal, built for offices and contemporary bedrooms.', price: 54000, discount_price: 45900, sku: 'KALA-MOD-004', stock_quantity: 6, main_image: '/static/images/modern-abstracts-3813de.jpg', hover_image: '/static/images/style-modern.png', size: '8x10 ft', shape: 'Rectangle', space: 'Office', material: 'Wool and Viscose', origin: 'Bhadohi, India', pattern_style: 'Abstract', is_featured: true, is_new_arrival: true, is_best_seller: false, gallery: [], variants: [], reviews: [], tags: [{ name: 'Modern' }, { name: 'Office' }] },
-    { id: 9005, category: 2, category_name: 'Woolen Rugs', category_slug: 'woolen-rugs', title: 'Indigo Courtyard Wool Rug', slug: 'indigo-courtyard-wool-rug', short_description: 'Deep indigo wool for formal living rooms.', description: 'Dense wool pile and a courtyard-inspired border make this rug a strong anchor for formal seating arrangements.', price: 76000, discount_price: 62900, sku: 'KALA-WOOL-005', stock_quantity: 3, main_image: '/static/images/hero-3-26995d.jpg', hover_image: '/static/images/Rug_Car/50/dsc-6014-042bcc.jpg', size: '9x12 ft', shape: 'Rectangle', space: 'Living Room', material: 'Highland Wool', origin: 'Varanasi, India', pattern_style: 'Traditional', is_featured: true, is_new_arrival: false, is_best_seller: true, gallery: [], variants: [], reviews: [], tags: [{ name: 'Traditional' }, { name: 'Living Room' }] },
-    { id: 9006, category: 3, category_name: 'Vintage Kilims', category_slug: 'vintage-kilims', title: 'Ochre Runner Kilim', slug: 'ochre-runner-kilim', short_description: 'A slim flatweave runner for corridors.', description: 'A durable flatweave runner with ochre and brick motifs, ideal for hallways and transitional spaces.', price: 28000, discount_price: 22900, sku: 'KALA-RUN-006', stock_quantity: 8, main_image: '/static/images/Rug_Car/25/dsc-5790-f53492.jpg', hover_image: '/static/images/Rug_Car/25/dsc-5791-14ce62.jpg', size: '2.5x8 ft', shape: 'Runner', space: 'Hallway', material: 'Handspun Wool', origin: 'Mirzapur, India', pattern_style: 'Geometric', is_featured: false, is_new_arrival: true, is_best_seller: false, gallery: [], variants: [], reviews: [], tags: [{ name: 'Runner' }, { name: 'Hallway' }] },
-    { id: 9007, category: 1, category_name: 'Silk Carpets', category_slug: 'silk-carpets', title: 'Pearl Round Silk Accent Rug', slug: 'pearl-round-silk-accent-rug', short_description: 'A round silk accent for intimate corners.', description: 'Soft pearl silk and a compact round silhouette create a polished accent for bedrooms, foyers, and reading corners.', price: 58000, discount_price: 49900, sku: 'KALA-SILK-007', stock_quantity: 4, main_image: '/static/images/Rug_Car/35/dsc-5870-ab8210.jpg', hover_image: '/static/images/Rug_Car/35/dsc-5871-07b3d8.jpg', size: '6 ft round', shape: 'Round', space: 'Bedroom', material: 'Mulberry Silk', origin: 'Kashmir, India', pattern_style: 'Floral', is_featured: false, is_new_arrival: true, is_best_seller: false, gallery: [], variants: [], reviews: [], tags: [{ name: 'Round' }, { name: 'Bedroom' }] },
-    { id: 9008, category: 4, category_name: 'Modern Abstracts', category_slug: 'modern-abstracts', title: 'Charcoal Minimal Square Rug', slug: 'charcoal-minimal-square-rug', short_description: 'A square minimal rug for compact spaces.', description: 'A restrained charcoal square rug with a crisp hand-tufted surface for compact offices and lounge corners.', price: 39000, discount_price: 31900, sku: 'KALA-MOD-008', stock_quantity: 5, main_image: '/static/images/Rug_Car/29/dsc-5822-3da877.jpg', hover_image: '/static/images/Rug_Car/29/dsc-5823-cca7e4.jpg', size: '6x6 ft', shape: 'Square', space: 'Office', material: 'Wool and Cotton', origin: 'Bhadohi, India', pattern_style: 'Minimal', is_featured: false, is_new_arrival: false, is_best_seller: true, gallery: [], variants: [], reviews: [], tags: [{ name: 'Minimal' }, { name: 'Office' }] }
-];
+const FALLBACK_PRODUCTS = [];
 
 function normalizeProducts(data) {
     const products = data.results ?? data;
@@ -300,6 +291,34 @@ function updateSEO(title, description) {
     metaDesc.content = description || "Discover the finest collection of heritage-grade rugs and carpets at Kalakroti Rugs. Editorial curation for modern and traditional spaces.";
 }
 
+function injectProductJSONLD(product) {
+    let existingScript = document.getElementById('product-schema');
+    if (existingScript) existingScript.remove();
+
+    const schema = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": product.title,
+        "image": [window.location.origin + product.main_image],
+        "description": product.description || product.short_description,
+        "sku": product.sku,
+        "offers": {
+            "@type": "Offer",
+            "url": window.location.href,
+            "priceCurrency": "INR",
+            "price": product.discount_price || product.price,
+            "availability": product.stock_quantity > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+            "itemCondition": "https://schema.org/NewCondition"
+        }
+    };
+
+    const script = document.createElement('script');
+    script.id = 'product-schema';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(schema);
+    document.head.appendChild(script);
+}
+
 function renderBreadcrumbs(containerId, items) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -342,6 +361,19 @@ function closeAllSidebars() {
     const overlay = document.getElementById('sidebar-overlay');
     if (overlay) overlay.classList.remove('active');
     document.body.style.overflow = '';
+}
+
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    if (menu.classList.contains('translate-x-full')) {
+        menu.classList.remove('translate-x-full');
+        menu.classList.add('translate-x-0');
+        document.body.style.overflow = 'hidden';
+    } else {
+        menu.classList.add('translate-x-full');
+        menu.classList.remove('translate-x-0');
+        document.body.style.overflow = '';
+    }
 }
 
 // â”€â”€ Help FAB (Fixed Bottom Right - CSS handles position) â”€â”€
@@ -470,7 +502,7 @@ document.addEventListener('keydown', e => {
 // â”€â”€ Shopping Suite â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function formatPrice(val) {
-    return `â‚¹${parseFloat(val).toLocaleString('en-IN')}`;
+    return `₹${parseFloat(val).toLocaleString('en-IN')}`;
 }
 
 function updateCart(shouldSync = true) {
@@ -498,7 +530,7 @@ function updateCart(shouldSync = true) {
     
     container.innerHTML = cart.length ? cart.map((item, i) => `
         <div class="cart-item flex gap-4 mb-8 group">
-            <img src="${item.main_image}" class="w-24 h-28 object-cover rounded-sm">
+            <img src="${item.main_image}" class="w-24 h-28 object-cover rounded-sm" loading="lazy">
             <div class="flex-1">
                 <h4 class="font-serif text-lg mb-1 leading-tight">${item.title}</h4>
                 <p class="text-sm text-heritage-gold font-bold mb-4">${formatPrice(item.discount_price || item.price)}</p>
@@ -557,7 +589,7 @@ function updateCheckoutSummary() {
     
     container.innerHTML = cart.map(item => `
         <div class="flex gap-4">
-            <img src="${item.main_image}" class="w-16 h-20 object-cover rounded-sm">
+            <img src="${item.main_image}" class="w-16 h-20 object-cover rounded-sm" loading="lazy">
             <div class="flex-1">
                 <h4 class="font-serif text-base leading-tight">${item.title}</h4>
                 <p class="text-xs opacity-50 mt-1">${item.qty} x ${formatPrice(item.discount_price || item.price)}</p>
@@ -841,7 +873,7 @@ function updateWishlist(shouldSync = true) {
     
     container.innerHTML = wishlist.length ? wishlist.map((item, i) => `
         <div class="cart-item flex gap-4 mb-8">
-            <img src="${item.main_image}" class="w-24 h-28 object-cover rounded-sm">
+            <img src="${item.main_image}" class="w-24 h-28 object-cover rounded-sm" loading="lazy">
             <div class="flex-1">
                 <h4 class="font-serif text-lg mb-1 leading-tight">${item.title}</h4>
                 <p class="text-sm text-heritage-gold font-bold mb-4">${formatPrice(item.discount_price || item.price)}</p>
@@ -924,7 +956,7 @@ function switchShopTab(tab) {
     container.innerHTML = items.map(item => `
         <div class="group relative aspect-[4/5] overflow-hidden rounded-sm cursor-pointer" 
              onclick="navigateTo(event, '/${tab}/${item.slug}')">
-            <img src="/static/images/${item.img}" class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110 grayscale-[10%] group-hover:grayscale-0">
+            <img src="/static/images/${item.img}" class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110 grayscale-[10%] group-hover:grayscale-0" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
             <div class="absolute bottom-8 left-0 right-0 text-center">
                 <span class="font-serif text-xl text-white tracking-wide">${item.name}</span>
@@ -942,41 +974,101 @@ function updateResultsHeader(title, subtitle) {
     if (s) s.innerText = subtitle;
 }
 
-async function fetchResults() {
+let currentPage = 1;
+let hasNextPage = true;
+let isLoadingPage = false;
+let currentProducts = [];
+let infiniteObserver = null;
+
+async function fetchResults(append = false) {
     const grid = document.getElementById('results-grid');
     if (!grid) return;
-    if (typeof KalakrotiLoader !== 'undefined') {
-        KalakrotiLoader.injectInline(grid, "Curating your collection...");
-    } else {
-        grid.innerHTML = '<div class="col-span-3 text-center py-20"><span class="animate-pulse">Curating your collection...</span></div>';
+    
+    if (!append) {
+        currentPage = 1;
+        currentProducts = [];
+        hasNextPage = true;
+        const skeletonHTML = Array(6).fill().map(() => `
+            <div class="product-card animate-pulse">
+                <div class="bg-heritage-beige/50 w-full aspect-[4/5] rounded-sm mb-6"></div>
+                <div class="h-4 bg-heritage-beige/70 w-3/4 mb-3 rounded-sm mx-auto"></div>
+                <div class="h-3 bg-heritage-beige/50 w-1/2 rounded-sm mx-auto"></div>
+            </div>
+        `).join('');
+        grid.innerHTML = skeletonHTML;
     }
     
-    let url = `${API_BASE_URL}/products/?ordering=${activeFilters.sort}&page_size=100`;
+    if (isLoadingPage || !hasNextPage) return;
+    isLoadingPage = true;
+
+    let url = `${API_BASE_URL}/products/?ordering=${activeFilters.sort}&page_size=12&page=${currentPage}`;
     if (activeFilters.search) url += `&search=${encodeURIComponent(activeFilters.search)}`;
     if (activeFilters.price_min > 0) url += `&price__gte=${activeFilters.price_min}`;
     if (activeFilters.price_max < 100000) url += `&price__lte=${activeFilters.price_max}`;
-    // room maps to space__icontains
     if (activeFilters.room) url += `&space__icontains=${encodeURIComponent(activeFilters.room)}`;
-    // style maps to tags__name
     if (activeFilters.style) url += `&tags__name=${encodeURIComponent(activeFilters.style)}`;
     if (activeFilters.category_slug) url += `&category__slug=${activeFilters.category_slug}`;
-    
-    // Multi-select filters
     if (activeFilters.space.length) activeFilters.space.forEach(s => url += `&space__icontains=${encodeURIComponent(s)}`);
     if (activeFilters.shape.length) activeFilters.shape.forEach(s => url += `&shape__icontains=${encodeURIComponent(s)}`);
     if (activeFilters.size.length) activeFilters.size.forEach(s => url += `&size__icontains=${encodeURIComponent(s)}`);
     if (activeFilters.material.length) activeFilters.material.forEach(s => url += `&material=${encodeURIComponent(s)}`);
 
     try {
-        const { products, source } = await fetchCatalogProducts(url, { filteredFallback: true });
-        renderProducts(products, grid);
+        const response = await fetch(url);
+        const data = await response.json();
+        const products = normalizeProducts(data);
+        
+        if (data.next) {
+            hasNextPage = true;
+            currentPage++;
+        } else {
+            hasNextPage = false;
+        }
+
+        currentProducts = append ? [...currentProducts, ...products] : products;
+        
+        if (!append) grid.innerHTML = '';
+        renderProducts(products, grid, append);
+        
         const countEl = document.getElementById('results-count');
-        if (countEl) countEl.innerText = `Showing ${products.length} product${products.length !== 1 ? 's' : ''}${source === 'fallback' ? ' from curated picks' : ''}`;
-        populateSidebarFilters(source === 'fallback' ? FALLBACK_PRODUCTS : products);
+        if (countEl) countEl.innerText = `Showing ${currentProducts.length} product${currentProducts.length !== 1 ? 's' : ''}`;
+        
+        if (!append) populateSidebarFilters(currentProducts);
+        
+        setupInfiniteObserver(grid);
     } catch (e) {
         console.error('fetchResults error:', e);
-        grid.innerHTML = '<div class="col-span-3 text-center py-20 text-heritage-dark/40">Unable to load products. Please try again.</div>';
+        if (!append) grid.innerHTML = '<div class="col-span-3 text-center py-20 text-heritage-dark/60">An error occurred loading the collection.</div>';
+    } finally {
+        isLoadingPage = false;
     }
+}
+
+function setupInfiniteObserver(grid) {
+    if (infiniteObserver) infiniteObserver.disconnect();
+    
+    let marker = document.getElementById('infinite-scroll-marker');
+    if (!marker) {
+        marker = document.createElement('div');
+        marker.id = 'infinite-scroll-marker';
+        marker.className = 'w-full h-10 mt-10';
+        grid.parentNode.appendChild(marker);
+    }
+    
+    if (!hasNextPage) {
+        marker.style.display = 'none';
+        return;
+    }
+    
+    marker.style.display = 'block';
+    
+    infiniteObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !isLoadingPage && hasNextPage) {
+            fetchResults(true);
+        }
+    }, { rootMargin: '200px' });
+    
+    infiniteObserver.observe(marker);
 }
 
 function applyFilters() {
@@ -1200,7 +1292,17 @@ function populateSidebarFilters(products) {
 
 async function fetchProductDetail(slug) {
     const container = document.getElementById('product-content');
-    container.innerHTML = '<div class="text-center py-40"><span class="animate-pulse font-serif text-2xl">Curating Masterpiece...</span></div>';
+    container.innerHTML = `
+        <div class="flex flex-col md:flex-row gap-16 animate-pulse mt-8">
+            <div class="md:w-1/2 bg-heritage-beige/50 aspect-[4/5] rounded-sm"></div>
+            <div class="md:w-1/2 space-y-6 pt-10">
+                <div class="h-10 bg-heritage-beige/70 w-3/4 rounded-sm"></div>
+                <div class="h-6 bg-heritage-beige/50 w-1/4 rounded-sm"></div>
+                <div class="h-24 bg-heritage-beige/40 w-full rounded-sm mt-8"></div>
+                <div class="h-12 bg-heritage-beige/70 w-1/2 rounded-sm mt-12"></div>
+            </div>
+        </div>
+    `;
     
     try {
         const { products } = await fetchCatalogProducts(`${API_BASE_URL}/products/?slug=${slug}`, { allowEmpty: true });
@@ -1213,6 +1315,7 @@ async function fetchProductDetail(slug) {
 
         // SEO & Breadcrumbs
         updateSEO(product.title, product.description.substring(0, 160));
+        injectProductJSONLD(product);
         renderBreadcrumbs('product-breadcrumbs', [
             { label: 'Collection', path: '/all' },
             { label: product.category_name, path: `/category/${product.category_slug || slugifyText(product.category_name)}` },
@@ -1230,12 +1333,12 @@ async function fetchProductDetail(slug) {
                 <div class="flex-1">
                     <div class="sticky top-32 space-y-4">
                         <div class="aspect-[4/5] overflow-hidden bg-heritage-beige rounded-sm group cursor-zoom-in">
-                            <img id="main-product-image" src="${product.main_image}" alt="${product.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <img id="main-product-image" src="${product.main_image}" alt="${product.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
                         </div>
                         <div class="grid grid-cols-4 gap-4">
                             ${gallery.map((img, i) => `
                                 <div class="aspect-square cursor-pointer overflow-hidden bg-heritage-beige rounded-sm border-2 ${i === 0 ? 'border-heritage-gold' : 'border-transparent'} hover:border-heritage-gold transition-all gallery-thumb" onclick="changePDPImage(this, '${img}')">
-                                    <img src="${img}" class="w-full h-full object-cover">
+                                    <img src="${img}" class="w-full h-full object-cover" loading="lazy">
                                 </div>
                             `).join('')}
                         </div>
@@ -1361,13 +1464,13 @@ function selectVariant(btn, price, discountPrice, size) {
 
 const PRODUCT_FALLBACK_IMG = '/static/images/hero-1-bc2ca9.png';
 
-function renderProducts(products, container) {
+function renderProducts(products, container, append = false) {
     if (!products || !products.length) {
-        container.innerHTML = '<p class="col-span-full text-center text-heritage-dark/40 py-20">No matching pieces found in our collection.</p>';
+        if (!append) container.innerHTML = '<p class="col-span-full text-center text-heritage-dark/40 py-20">No matching pieces found in our collection.</p>';
         return;
     }
 
-    container.innerHTML = products.map((p, i) => {
+    const html = products.map((p, i) => {
         const discountPct = p.discount_price ? Math.round((1 - (p.discount_price / p.price)) * 100) : 0;
         const imgSrc = p.main_image || PRODUCT_FALLBACK_IMG;
         return `
@@ -1393,6 +1496,12 @@ function renderProducts(products, container) {
             </div>
         `;
     }).join('');
+
+    if (append) {
+        container.insertAdjacentHTML('beforeend', html);
+    } else {
+        container.innerHTML = html;
+    }
 }
 
 // â”€â”€ Search & Infrastructure â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -1436,7 +1545,7 @@ async function fetchCategories() {
         container.innerHTML = items.slice(0,4).map((cat, i) => `
             <div class="group product-card fade-up cursor-pointer" onclick="navigateTo(event, '/category/${cat.slug}')">
                 <div class="img-wrapper overflow-hidden rounded-sm">
-                    <img src="${cat.image_url}" class="transition-transform duration-1000 group-hover:scale-110">
+                    <img src="${cat.image_url}" class="transition-transform duration-1000 group-hover:scale-110" loading="lazy">
                 </div>
                 <div class="text-center mt-6">
                     <span class="product-label">Collection</span>
@@ -1448,7 +1557,7 @@ async function fetchCategories() {
         container.innerHTML = FALLBACK_CATEGORIES.slice(0,4).map(cat => `
             <div class="group product-card fade-up cursor-pointer" onclick="navigateTo(event, '/category/${cat.slug}')">
                 <div class="img-wrapper overflow-hidden rounded-sm">
-                    <img src="${cat.image_url}" class="transition-transform duration-1000 group-hover:scale-110">
+                    <img src="${cat.image_url}" class="transition-transform duration-1000 group-hover:scale-110" loading="lazy">
                 </div>
                 <div class="text-center mt-6">
                     <span class="product-label">Collection</span>

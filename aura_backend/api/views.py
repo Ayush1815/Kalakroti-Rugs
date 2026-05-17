@@ -214,6 +214,53 @@ class ProductViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'description', 'origin', 'material', 'category__name', 'tags__name', 'space', 'shape', 'size']
     ordering_fields = ['price', 'created_at', 'title']
 
+    def get_cache_key(self, prefix, params):
+        import hashlib
+        sorted_params = sorted(params.items())
+        params_str = "&".join([f"{k}={v}" for k, v in sorted_params])
+        hash_str = hashlib.md5(params_str.encode('utf-8')).hexdigest()
+        return f"{prefix}_{hash_str}"
+
+    def list(self, request, *args, **kwargs):
+        from django.core.cache import cache
+        cache_key = self.get_cache_key("products_list", request.query_params)
+        cached_response = cache.get(cache_key)
+        if cached_response is not None:
+            return Response(cached_response)
+        
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, 60 * 15)  # Cache for 15 minutes
+        return response
+
+    def retrieve(self, request, *args, **kwargs):
+        from django.core.cache import cache
+        pk = kwargs.get('pk')
+        cache_key = f"product_detail_{pk}"
+        cached_response = cache.get(cache_key)
+        if cached_response is not None:
+            return Response(cached_response)
+            
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, 60 * 15)
+        return response
+
+    def clear_product_cache(self):
+        from django.core.cache import cache
+        cache.clear()  # Clear cache on updates to keep client catalog highly consistent
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        self.clear_product_cache()
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        self.clear_product_cache()
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        self.clear_product_cache()
+
+
 class CouponViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Coupon.objects.filter(active=True)
     serializer_class = CouponSerializer

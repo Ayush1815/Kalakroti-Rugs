@@ -103,3 +103,33 @@ class ApiFlowTests(TestCase):
         product = Product.objects.get(sku='KALA-IMP-001')
         self.assertEqual(product.material, 'Mulberry Silk')
         self.assertEqual(product.tags.count(), 2)
+
+    def test_product_query_caching_and_invalidation(self):
+        from django.core.cache import cache
+        cache.clear()
+        
+        # Populate cache
+        res_cached_1 = self.client.get('/api/products/')
+        self.assertEqual(res_cached_1.status_code, 200)
+        
+        # Modify product via PATCH
+        token = self.register()
+        self.auth(token)
+        
+        patch_res = self.client.patch(f'/api/products/{self.product.id}/', {
+            'title': 'Jaipur Silk Edition Rug'
+        }, format='json')
+        self.assertEqual(patch_res.status_code, 200)
+        
+        # Fetch again to verify cache has been invalidated and serves the updated title
+        res_cached_2 = self.client.get('/api/products/')
+        self.assertEqual(res_cached_2.data[0]['title'], 'Jaipur Silk Edition Rug')
+
+    def test_seed_catalog_command_with_if_empty(self):
+        from django.core.management import call_command
+        from io import StringIO
+        
+        out = StringIO()
+        call_command('seed_catalog', '--if-empty', stdout=out)
+        self.assertIn("Seed skipped", out.getvalue())
+
