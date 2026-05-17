@@ -39,44 +39,47 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Catalog already has products. Seed skipped."))
             return
 
-        with transaction.atomic():
-            self.stdout.write("Clearing existing products...")
-            Product.objects.all().delete()
-            Category.objects.all().delete()
-            Tag.objects.all().delete()
-            
-            categories_map = {}
-
-            base_dir = Path(settings.MEDIA_ROOT) / "Rug_Car"
+            # Support both "Rug Car" (with space) and "Rug_Car" (with underscore)
+            base_dir = Path(settings.MEDIA_ROOT) / "Rug Car"
             if not base_dir.exists():
-                self.stdout.write(self.style.ERROR(f"Directory not found: {base_dir}"))
+                base_dir = Path(settings.MEDIA_ROOT) / "Rug_Car"
+
+            if not base_dir.exists():
+                self.stdout.write(self.style.ERROR("Directory 'Rug Car' or 'Rug_Car' not found under MEDIA_ROOT."))
                 return
 
-            created = 0
-            
-            for folder_name, content in PREMIUM_CONTENT.items():
-                folder_path = base_dir / folder_name
-                if not folder_path.exists():
-                    self.stdout.write(self.style.WARNING(f"Skipping {folder_name}: Directory missing"))
-                    continue
+            with transaction.atomic():
+                self.stdout.write("Clearing existing products...")
+                Product.objects.all().delete()
+                Category.objects.all().delete()
+                Tag.objects.all().delete()
                 
-                images = sorted([img for img in folder_path.iterdir() if img.suffix.lower() in ['.jpg', '.png', '.jpeg']])
-                if not images:
-                    self.stdout.write(self.style.WARNING(f"Skipping {folder_name}: No images found"))
-                    continue
-
-                # Ensure Category exists
-                cat_name = content["cat"]
-                if cat_name not in categories_map:
-                    categories_map[cat_name] = Category.objects.create(
-                        name=cat_name, slug=slugify(cat_name), image_url="/static/images/hero-1-bc2ca9.png"
-                    )
-
-                category = categories_map[cat_name]
+                categories_map = {}
+                created = 0
                 
-                # Image URLs
-                main_image_url = f"/images/Rug_Car/{folder_name}/{images[0].name}"
-                hover_image_url = f"/images/Rug_Car/{folder_name}/{images[1].name}" if len(images) > 1 else None
+                for folder_name, content in PREMIUM_CONTENT.items():
+                    folder_path = base_dir / folder_name
+                    if not folder_path.exists():
+                        self.stdout.write(self.style.WARNING(f"Skipping {folder_name}: Directory missing"))
+                        continue
+                    
+                    images = sorted([img for img in folder_path.iterdir() if img.suffix.lower() in ['.jpg', '.png', '.jpeg']])
+                    if not images:
+                        self.stdout.write(self.style.WARNING(f"Skipping {folder_name}: No images found"))
+                        continue
+
+                    # Ensure Category exists
+                    cat_name = content["cat"]
+                    if cat_name not in categories_map:
+                        categories_map[cat_name] = Category.objects.create(
+                            name=cat_name, slug=slugify(cat_name), image_url="/static/images/hero-1-bc2ca9.png"
+                        )
+
+                    category = categories_map[cat_name]
+                    
+                    # Image URLs (Dynamic directory name support)
+                    main_image_url = f"/images/{base_dir.name}/{folder_name}/{images[0].name}"
+                    hover_image_url = f"/images/{base_dir.name}/{folder_name}/{images[1].name}" if len(images) > 1 else None
 
                 # Create Product
                 product = Product.objects.create(
@@ -107,10 +110,10 @@ class Command(BaseCommand):
                 for idx, img_path in enumerate(images):
                     ProductImage.objects.create(
                         product=product,
-                        image_url=f"/images/Rug_Car/{folder_name}/{img_path.name}",
+                        image_url=f"/images/{base_dir.name}/{folder_name}/{img_path.name}",
                         order=idx
                     )
 
                 created += 1
 
-            self.stdout.write(self.style.SUCCESS(f"Seed complete. Successfully built {created} products from Rug_Car directory."))
+            self.stdout.write(self.style.SUCCESS(f"Seed complete. Successfully built {created} products from {base_dir.name} directory."))

@@ -363,19 +363,6 @@ function closeAllSidebars() {
     document.body.style.overflow = '';
 }
 
-function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    if (menu.classList.contains('translate-x-full')) {
-        menu.classList.remove('translate-x-full');
-        menu.classList.add('translate-x-0');
-        document.body.style.overflow = 'hidden';
-    } else {
-        menu.classList.add('translate-x-full');
-        menu.classList.remove('translate-x-0');
-        document.body.style.overflow = '';
-    }
-}
-
 // â”€â”€ Help FAB (Fixed Bottom Right - CSS handles position) â”€â”€
 function initFAB() {
     // FAB is now fixed via CSS (bottom: 32px; right: 32px)
